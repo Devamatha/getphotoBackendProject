@@ -30,6 +30,7 @@ public class PhotoGrapherController
 			
 		}
 		
+		
 	}
 	
 	@PostMapping("/login")
