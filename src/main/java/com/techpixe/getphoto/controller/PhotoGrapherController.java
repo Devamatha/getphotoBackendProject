@@ -24,12 +24,16 @@ public class PhotoGrapherController
 	@Autowired
 	private PhotoGrapherService photoGrapherService;
 	@PostMapping("/registration/{admin}")
-	public ResponseEntity<?>addRegisterion(@PathVariable Long admin,@RequestParam String email,@RequestParam Long mobileNumber,@RequestParam String fullName){
-		try {
+	public ResponseEntity<?>addRegisterion(@PathVariable Long admin,@RequestParam String email,@RequestParam Long mobileNumber,@RequestParam String fullName)
+	{
+		try
+		{
 		PhotoGrapher registration=photoGrapherService.registration(admin,email,mobileNumber,fullName);
 		
 		return ResponseEntity.ok(registration);
-		}catch(Exception e){
+		}
+		catch(Exception e)
+		{
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Procesing in the request");
 			
 		}
@@ -37,7 +41,8 @@ public class PhotoGrapherController
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestParam String emailOrMobileNumber, @RequestParam String password) {
+	public ResponseEntity<?> login(@RequestParam String emailOrMobileNumber, @RequestParam String password) 
+	{
 		if (emailOrMobileNumber != null) 
 		{
 			if (isEmail(emailOrMobileNumber)) 
@@ -73,19 +78,24 @@ public class PhotoGrapherController
 	{
 		return emailOrMobileNumber.matches("\\d+");
 	}
-@GetMapping("/get/{photographer_Id}")
+	
+	
+	
+    @GetMapping("/get/{photographer_Id}")
 	public ResponseEntity<?> fetchById(@PathVariable("photographer_Id") Long id)
 	{
 		PhotoGrapher fetchById = photoGrapherService.fetchById(id);
 		return ResponseEntity.ok(fetchById);
 	}
 	
+    
 	@GetMapping("/getall")
 	public ResponseEntity<List<PhotoGrapher>> fetchAll()
 	{
 		List<PhotoGrapher> fetchAll = photoGrapherService.fetchAll();
 		return ResponseEntity.ok(fetchAll);
 	}
+	
 	
 	@DeleteMapping("/delete/{photographer_Id}")
 	public ResponseEntity<Void> deleteById(@PathVariable("photographer_Id") Long id)
@@ -98,15 +108,11 @@ public class PhotoGrapherController
 		else
 		{
 			photoGrapherService.deleteById(id);
+			return new ResponseEntity<>(HttpStatus.OK);
+
 		}
-		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 		
-//	@PutMapping("/update/{photographer_Id}")
-//	public ResponseEntity<PhotoGrapher> updatePhotographer(@PathVariable("photographer_Id") Long id, @RequestBody PhotoGrapher photoGrapher)
-//	{
-//		Optional<PhotoGrapher> updatePhotographer = photoGrapherService.update(id, photoGrapher);
-//		return updatePhotographer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
-//	}
+
 	
 }

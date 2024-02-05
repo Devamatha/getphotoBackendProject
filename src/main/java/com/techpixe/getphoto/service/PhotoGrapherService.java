@@ -19,6 +19,5 @@ public interface PhotoGrapherService {
 
 	List<PhotoGrapher> fetchAll();
 
-	// Optional<PhotoGrapher> update(Long id, PhotoGrapher photoGrapher);
-
+	
 }
