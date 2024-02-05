@@ -2,6 +2,7 @@ package com.techpixe.getphoto.serviceImpl;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -148,18 +149,18 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 	public void deleteById(Long id) {
 		photoGrapherRepository.deleteById(id);
 	}
-//	@Override
-//	public Optional<PhotoGrapher> update(Long id, PhotoGrapher photoGrapher)
-//	{
-//		return photoGrapherRepository.findById(id)
-//				.map(existingPhotoGrapher -> {
-//					existingPhotoGrapher.setFullName(photoGrapher.getFullName() !=null ? photoGrapher.getFullName() : existingPhotoGrapher.getFullName());
-//					existingPhotoGrapher.setEmail(photoGrapher.getEmail() !=null ? photoGrapher.getEmail() : existingPhotoGrapher.getEmail());
-//					existingPhotoGrapher.setMobileNumber(photoGrapher.getMobileNumber() !=null ? photoGrapher.getMobileNumber() : existingPhotoGrapher.getMobileNumber());
-//					existingPhotoGrapher.setPassword(photoGrapher.getPassword() !=null ? photoGrapher.getPassword() : existingPhotoGrapher.getPassword());
-//					
-//					return photoGrapherRepository.save(existingPhotoGrapher);
-//				});
-//	}
+
+	@Override
+	public Optional<PhotoGrapher> update(Long id, String email, Long mobileNumber, String password, String fullName) {
+	    return photoGrapherRepository.findById(id).map(existingPhotoGrapher -> {
+	        existingPhotoGrapher.setFullName(fullName != null ? fullName : existingPhotoGrapher.getFullName());
+	        existingPhotoGrapher.setEmail(email != null ? email : existingPhotoGrapher.getEmail());
+	        existingPhotoGrapher.setMobileNumber(mobileNumber != null ? mobileNumber : existingPhotoGrapher.getMobileNumber());
+	        existingPhotoGrapher.setPassword(password != null ? password : existingPhotoGrapher.getPassword());
+
+	        return photoGrapherRepository.save(existingPhotoGrapher);
+	    });
+	}
+
 
 }

@@ -1,6 +1,7 @@
 package com.techpixe.getphoto.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 
@@ -19,6 +20,6 @@ public interface PhotoGrapherService {
 
 	List<PhotoGrapher> fetchAll();
 
-	// Optional<PhotoGrapher> update(Long id, PhotoGrapher photoGrapher);
+	 Optional<PhotoGrapher> update(Long id,String email,Long mobileNumber, String password,String fullName);
 
 }
