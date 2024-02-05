@@ -1,5 +1,7 @@
 package com.techpixe.getphoto.serviceImpl;
 
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,7 @@ import com.techpixe.getphoto.service.PhotoGrapherService;
 @Service
 public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 	@Autowired
-	private PhotoGrapherRepository PhotoGrapherRepository;
+	private PhotoGrapherRepository photoGrapherRepository;
 
 	@Autowired
 	private AdminRepository adminRepository;
@@ -44,13 +46,12 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			photoGrapher.setEmail(email);
 			photoGrapher.setMobileNumber(mobileNumber);
 			photoGrapher.setFullName(fullName);
-           photoGrapher.setRole("photographer");
+			photoGrapher.setRole("photographer");
 			String password = generatePassword();
 			photoGrapher.setPassword(password);
 			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 			simpleMailMessage.setFrom(fromMail);
 			simpleMailMessage.setTo(email);
-			
 
 			simpleMailMessage.setSubject("Registration completed Successfully in GetPhoto application\n");
 			simpleMailMessage.setText("Dear " + fullName
@@ -59,7 +60,7 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 					+ "\n\n"
 					+ "you will be required to reset the temporary password upon login\n\n\n if you have any question or if you would like to request a call-back,please email us at support info@techpixe.com");
 			javaMailSender.send(simpleMailMessage);
-			return PhotoGrapherRepository.save(photoGrapher);
+			return photoGrapherRepository.save(photoGrapher);
 		} else {
 			System.out.println("id is not present");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin with this Id is not present" + admin);
@@ -87,16 +88,12 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 
 		return lettersBuilder.toString() + digitsBuilder.toString();
 	}
-	
-	
-	
-	@Override
-	public ResponseEntity<?> loginByMobileNumber(Long mobileNumber, String password)
-	{
-		PhotoGrapher user = PhotoGrapherRepository.findByMobileNumber(mobileNumber);
 
-		if (user != null && user.getPassword().equals(password))
-		{
+	@Override
+	public ResponseEntity<?> loginByMobileNumber(Long mobileNumber, String password) {
+		PhotoGrapher user = photoGrapherRepository.findByMobileNumber(mobileNumber);
+
+		if (user != null && user.getPassword().equals(password)) {
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user.getPhotographer_Id());
 			photoGrapherDTo.setFullName(user.getFullName());
@@ -104,9 +101,7 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			photoGrapherDTo.setMobileNumber(user.getMobileNumber());
 			photoGrapherDTo.setPassword(user.getPassword());
 			return ResponseEntity.ok(photoGrapherDTo);
-		}
-		else 
-		{
+		} else {
 			ErrorResponseDto errorResponse = new ErrorResponseDto();
 			errorResponse.setError("Invalid mobile number or password");
 			return ResponseEntity.internalServerError().body(errorResponse);
@@ -114,12 +109,10 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 	}
 
 	@Override
-	public ResponseEntity<?> loginByEmail(String email, String password) 
-	{
-		PhotoGrapher user = PhotoGrapherRepository.findByEmail(email);
+	public ResponseEntity<?> loginByEmail(String email, String password) {
+		PhotoGrapher user = photoGrapherRepository.findByEmail(email);
 
-		if (user != null && user.getPassword().equals(password))
-		{
+		if (user != null && user.getPassword().equals(password)) {
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user.getPhotographer_Id());
 			photoGrapherDTo.setFullName(user.getFullName());
@@ -128,13 +121,45 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			photoGrapherDTo.setPassword(user.getPassword());
 			return ResponseEntity.ok(photoGrapherDTo);
 
-		} 
-		else 
-		{
+		} else {
 			ErrorResponseDto errorResponse = new ErrorResponseDto();
 			errorResponse.setError("Invalid email or password");
 			return ResponseEntity.internalServerError().body(errorResponse);
 		}
 	}
+
+	@Override
+	public PhotoGrapher fetchById(Long id) {
+
+		return photoGrapherRepository.findById(id)
+				.orElseThrow(() -> new NoSuchElementException("PhotoGrapher Id '" + id + "' is not present "));
+	}
+
+	@Override
+	public List<PhotoGrapher> fetchAll() {
+		List<PhotoGrapher> fetchAll = photoGrapherRepository.findAll();
+		if (fetchAll.isEmpty()) {
+			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, " No PhotoGraphers found");
+		}
+		return fetchAll;
+	}
+
+	@Override
+	public void deleteById(Long id) {
+		photoGrapherRepository.deleteById(id);
+	}
+//	@Override
+//	public Optional<PhotoGrapher> update(Long id, PhotoGrapher photoGrapher)
+//	{
+//		return photoGrapherRepository.findById(id)
+//				.map(existingPhotoGrapher -> {
+//					existingPhotoGrapher.setFullName(photoGrapher.getFullName() !=null ? photoGrapher.getFullName() : existingPhotoGrapher.getFullName());
+//					existingPhotoGrapher.setEmail(photoGrapher.getEmail() !=null ? photoGrapher.getEmail() : existingPhotoGrapher.getEmail());
+//					existingPhotoGrapher.setMobileNumber(photoGrapher.getMobileNumber() !=null ? photoGrapher.getMobileNumber() : existingPhotoGrapher.getMobileNumber());
+//					existingPhotoGrapher.setPassword(photoGrapher.getPassword() !=null ? photoGrapher.getPassword() : existingPhotoGrapher.getPassword());
+//					
+//					return photoGrapherRepository.save(existingPhotoGrapher);
+//				});
+//	}
 
 }
