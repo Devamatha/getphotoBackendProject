@@ -6,5 +6,6 @@ import com.techpixe.getphoto.entity.PhotoGrapher;
 
 public interface PhotoGrapherRepository extends JpaRepository<PhotoGrapher, Long>
 {
-
+	PhotoGrapher findByEmail(String email);
+	PhotoGrapher findByMobileNumber(Long mobileNumber);
 }
