@@ -7,8 +7,7 @@ import org.springframework.http.ResponseEntity;
 
 import com.techpixe.getphoto.entity.PhotoGrapher;
 
-public interface PhotoGrapherService 
-{
+public interface PhotoGrapherService {
 	PhotoGrapher registration(Long admin, String email, Long mobileNumber, String fullName);
 
 	ResponseEntity<?> loginByMobileNumber(Long mobileNumber, String password);
@@ -21,7 +20,6 @@ public interface PhotoGrapherService
 
 	List<PhotoGrapher> fetchAll();
 
-
-	 Optional<PhotoGrapher> update(Long id,String email,Long mobileNumber, String password,String fullName);
+	Optional<PhotoGrapher> update(Long id, String email, Long mobileNumber, String password, String fullName);
 
 }

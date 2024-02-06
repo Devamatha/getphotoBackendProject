@@ -4,10 +4,11 @@ import org.springframework.http.ResponseEntity;
 
 import com.techpixe.getphoto.entity.Admin;
 
-public interface AdminService 
-{
-	Admin registerAdmin(String fullName,String email,Long mobileNumber,String password);
-	ResponseEntity<?> loginByMobileNumber(Long mobileNumber,String password);
+public interface AdminService {
+	Admin registerAdmin(String fullName, String email, Long mobileNumber, String password);
+
+	ResponseEntity<?> loginByMobileNumber(Long mobileNumber, String password);
+
 	ResponseEntity<?> loginByEmail(String email, String password);
-	
+
 }

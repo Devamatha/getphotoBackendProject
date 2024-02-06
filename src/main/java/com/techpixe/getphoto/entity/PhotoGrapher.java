@@ -16,26 +16,21 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PhotoGrapher 
-{
+public class PhotoGrapher {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long photographer_Id;
-	@Column(name="email", unique = true, nullable = false)
+	@Column(name = "email", unique = true, nullable = false)
 	private String email;
-	@Column(name="mobileNumber", unique = true, nullable = false)
+	@Column(name = "mobileNumber", unique = true, nullable = false)
 
 	private Long mobileNumber;
 	private String password;
 	private String fullName;
-	
-	@ManyToOne(fetch= FetchType.EAGER)
-	@JoinColumn(name="admin_Id")
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "admin_Id")
 	private Admin admin;
 	private String role;
 
-
-
-	
-	
 }

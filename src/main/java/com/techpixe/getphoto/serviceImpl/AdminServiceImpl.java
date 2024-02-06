@@ -19,8 +19,9 @@ public class AdminServiceImpl implements AdminService {
 	private AdminRepository adminRepository;
 	@Autowired
 	private PhotoGrapherRepository PhotoGrapherRepository;
+
 	@Override
-	public Admin registerAdmin(String fullName, String email, Long mobileNumber,String password) {
+	public Admin registerAdmin(String fullName, String email, Long mobileNumber, String password) {
 		Admin admin = new Admin();
 		admin.setFullName(fullName);
 		admin.setEmail(email);
@@ -30,17 +31,12 @@ public class AdminServiceImpl implements AdminService {
 		return adminRepository.save(admin);
 	}
 
-
-	
-	
 	@Override
-	public ResponseEntity<?> loginByMobileNumber(Long mobileNumber, String password)
-	{
+	public ResponseEntity<?> loginByMobileNumber(Long mobileNumber, String password) {
 		Admin user = adminRepository.findByMobileNumber(mobileNumber);
 		PhotoGrapher user1 = PhotoGrapherRepository.findByMobileNumber(mobileNumber);
 
-		if (user != null && user.getPassword().equals(password))
-		{
+		if (user != null && user.getPassword().equals(password)) {
 			AdminDto applicationFormDTo = new AdminDto();
 			applicationFormDTo.setAdmin_Id(user.getAdmin_Id());
 			applicationFormDTo.setFullName(user.getFullName());
@@ -50,9 +46,7 @@ public class AdminServiceImpl implements AdminService {
 			applicationFormDTo.setRole(user.getRole());
 
 			return ResponseEntity.ok(applicationFormDTo);
-		}
-		else if(user1!=null && user1.getPassword().equals(password))
-		{
+		} else if (user1 != null && user1.getPassword().equals(password)) {
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user1.getPhotographer_Id());
 			photoGrapherDTo.setFullName(user1.getFullName());
@@ -61,9 +55,7 @@ public class AdminServiceImpl implements AdminService {
 			photoGrapherDTo.setPassword(user1.getPassword());
 			photoGrapherDTo.setRole(user1.getRole());
 			return ResponseEntity.ok(photoGrapherDTo);
-		}
-		else 
-		{
+		} else {
 			ErrorResponseDto errorResponse = new ErrorResponseDto();
 			errorResponse.setError("Invalid mobile number or password");
 			return ResponseEntity.internalServerError().body(errorResponse);
@@ -71,13 +63,11 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 	@Override
-	public ResponseEntity<?> loginByEmail(String email, String password) 
-	{
+	public ResponseEntity<?> loginByEmail(String email, String password) {
 		Admin user = adminRepository.findByEmail(email);
 		PhotoGrapher user1 = PhotoGrapherRepository.findByEmail(email);
 
-		if (user != null && user.getPassword().equals(password))
-		{
+		if (user != null && user.getPassword().equals(password)) {
 			AdminDto applicationFormDTo = new AdminDto();
 			applicationFormDTo.setAdmin_Id(user.getAdmin_Id());
 			applicationFormDTo.setFullName(user.getFullName());
@@ -87,9 +77,7 @@ public class AdminServiceImpl implements AdminService {
 			applicationFormDTo.setRole(user.getRole());
 			return ResponseEntity.ok(applicationFormDTo);
 
-		} 
-		else if(user1!=null && user1.getPassword().equals(password))
-		{
+		} else if (user1 != null && user1.getPassword().equals(password)) {
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user1.getPhotographer_Id());
 			photoGrapherDTo.setFullName(user1.getFullName());
@@ -99,8 +87,7 @@ public class AdminServiceImpl implements AdminService {
 			photoGrapherDTo.setRole(user1.getRole());
 
 			return ResponseEntity.ok(photoGrapherDTo);
-		}
-		else {
+		} else {
 			ErrorResponseDto errorResponse = new ErrorResponseDto();
 			errorResponse.setError("Invalid email or password");
 			return ResponseEntity.internalServerError().body(errorResponse);
