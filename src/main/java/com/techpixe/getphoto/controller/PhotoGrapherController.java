@@ -26,6 +26,8 @@ public class PhotoGrapherController {
 	private PhotoGrapherService photoGrapherService;
 
 	@PostMapping("/registration/{admin}")
+
+
 	public ResponseEntity<?> addRegisterion(@PathVariable Long admin, @RequestParam String email,
 			@RequestParam Long mobileNumber, @RequestParam String fullName) {
 		try {
@@ -74,6 +76,7 @@ public class PhotoGrapherController {
 		return ResponseEntity.ok(fetchById);
 	}
 
+
 	@GetMapping("/getall")
 	public ResponseEntity<List<PhotoGrapher>> fetchAll() {
 		List<PhotoGrapher> fetchAll = photoGrapherService.fetchAll();
@@ -93,9 +96,11 @@ public class PhotoGrapherController {
 	}
 
 	@PutMapping("/update/{photographer_Id}")
-	public ResponseEntity<PhotoGrapher> updatePhotographer(@PathVariable("photographer_Id") Long id,@RequestParam(required = false) String email,@RequestParam(required = false) Long mobileNumber,@RequestParam(required = false) String password,@RequestParam(required = false) String fullName)
-	{
-		Optional<PhotoGrapher> updatePhotographer = photoGrapherService.update(id, email,mobileNumber,password,fullName);
+	public ResponseEntity<PhotoGrapher> updatePhotographer(@PathVariable("photographer_Id") Long id,
+			@RequestParam(required = false) String email, @RequestParam(required = false) Long mobileNumber,
+			@RequestParam(required = false) String password, @RequestParam(required = false) String fullName) {
+		Optional<PhotoGrapher> updatePhotographer = photoGrapherService.update(id, email, mobileNumber, password,
+				fullName);
 		return updatePhotographer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 
