@@ -32,7 +32,6 @@ public class Admin
 	@Column(name="email", unique = true, nullable = false)
     @Email(message = "Please provide a valid email address")
     @Pattern(regexp = ".+@.+\\..+", message = "Email address must contain @ symbol")
-
 	private String email;
 	
 	@Column(name="mobileNumber", unique = true, nullable = false)

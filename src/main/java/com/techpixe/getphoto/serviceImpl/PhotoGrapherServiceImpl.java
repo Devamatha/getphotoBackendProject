@@ -172,6 +172,7 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService
 		photoGrapherRepository.deleteById(id);
 	}
 
+	
 	@Override
 	public Optional<PhotoGrapher> update(Long id, String email, Long mobileNumber, String password, String fullName) {
 	    return photoGrapherRepository.findById(id).map(existingPhotoGrapher -> {
