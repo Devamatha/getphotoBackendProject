@@ -1,6 +1,5 @@
 package com.techpixe.getphoto.dto;
 
-
 public class EventDto {
 
 	private Long event_Id;
@@ -42,5 +41,5 @@ public class EventDto {
 	public void setQrCode(byte[] qrCode) {
 		this.qrCode = qrCode;
 	}
-	
+
 }

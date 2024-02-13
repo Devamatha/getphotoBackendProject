@@ -23,13 +23,15 @@ public class PhotoGrapher
 	private Long photographer_Id;
 	@Column(name="email", unique = true, nullable = false)
 	private String email;
+	
 	@Column(name="mobileNumber", unique = true, nullable = false)
-
 	private Long mobileNumber;
+	
 	private String password;
+	
 	private String fullName;
 	
-	@ManyToOne(fetch= FetchType.EAGER)
+	@ManyToOne(fetch= FetchType.LAZY)
 	@JoinColumn(name="admin_Id")
 	private Admin admin;
 	private String role;

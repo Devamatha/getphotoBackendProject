@@ -27,7 +27,6 @@ public class PhotoGrapherController {
 
 	@PostMapping("/registration/{admin}")
 
-
 	public ResponseEntity<?> addRegisterion(@PathVariable Long admin, @RequestParam String email,
 			@RequestParam Long mobileNumber, @RequestParam String fullName) {
 		try {
@@ -75,7 +74,6 @@ public class PhotoGrapherController {
 		PhotoGrapher fetchById = photoGrapherService.fetchById(id);
 		return ResponseEntity.ok(fetchById);
 	}
-
 
 	@GetMapping("/getall")
 	public ResponseEntity<List<PhotoGrapher>> fetchAll() {
