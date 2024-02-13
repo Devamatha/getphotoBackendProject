@@ -1,5 +1,6 @@
 package com.techpixe.getphoto.serviceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -48,8 +49,10 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			photoGrapher.setMobileNumber(mobileNumber);
 			photoGrapher.setFullName(fullName);
 			photoGrapher.setRole("photographer");
+			photoGrapher.setRegistrationDate(LocalDate.now());
 			String password = generatePassword();
 			photoGrapher.setPassword(password);
+			photoGrapher=photoGrapherRepository.save(photoGrapher);
 			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 			simpleMailMessage.setFrom(fromMail);
 			simpleMailMessage.setTo(email);
@@ -61,7 +64,7 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 					+ "\n\n"
 					+ "you will be required to reset the temporary password upon login\n\n\n if you have any question or if you would like to request a call-back,please email us at support info@techpixe.com");
 			javaMailSender.send(simpleMailMessage);
-			return photoGrapherRepository.save(photoGrapher);
+			return photoGrapher;
 		} else {
 			System.out.println("id is not present");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin with this Id is not present" + admin);

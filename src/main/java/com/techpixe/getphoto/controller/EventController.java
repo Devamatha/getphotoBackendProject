@@ -1,5 +1,7 @@
 package com.techpixe.getphoto.controller;
 
+import java.sql.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +19,13 @@ import com.techpixe.getphoto.service.EventService;
 public class EventController {
 	@Autowired
 	private EventService eventService;
-	
+
 	@PostMapping("/save/{photoGrapher}")
 
-	public ResponseEntity<?> addRegisterion(@RequestParam String eventName,@RequestParam String eventAddress,@PathVariable Long photoGrapher) {
+	public ResponseEntity<?> addRegisterion(@RequestParam String eventName, @RequestParam String eventAddress,
+			@RequestParam Date eventDate, @PathVariable Long photoGrapher) {
 		try {
-			Event registration = eventService.save(eventName, eventAddress, photoGrapher);
+			Event registration = eventService.save(eventName, eventAddress, eventDate, photoGrapher);
 
 			return ResponseEntity.ok(registration);
 		} catch (Exception e) {

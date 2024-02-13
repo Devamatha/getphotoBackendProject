@@ -1,5 +1,7 @@
 package com.techpixe.getphoto.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -28,6 +30,7 @@ public class Event {
 	@Column(name = "event_Address", nullable = false)
 	private String eventAddress;
 
+	private Date eventDate;
 	@Lob
 	@Column(columnDefinition = "longblob", name = "qrCode", nullable = false)
 	private byte[] qrCode;
