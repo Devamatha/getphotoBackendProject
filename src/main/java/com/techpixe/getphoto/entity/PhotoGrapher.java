@@ -1,5 +1,7 @@
 package com.techpixe.getphoto.entity;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,6 +35,10 @@ public class PhotoGrapher
 	
 	@ManyToOne(fetch= FetchType.LAZY)
 	@JoinColumn(name="admin_Id")
+    private LocalDate registrationDate;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "admin_Id")
 	private Admin admin;
 	private String role;
 

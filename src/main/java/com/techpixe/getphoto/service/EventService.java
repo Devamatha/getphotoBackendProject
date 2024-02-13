@@ -6,17 +6,16 @@ import java.util.Optional;
 
 import com.techpixe.getphoto.entity.Event;
 
-public interface EventService
-{
-	Event save(String eventName, String eventAddress, Long photoGrapher)throws IOException ;
+import java.sql.Date;
+
+public interface EventService {
+	Event save(String eventName, String eventAddress, Date eventDate, Long photoGrapher) throws IOException;
 
 	Event fetchById(Long id);
-	
+
 	List<Event> fetchAll();
-	
+
 	void deleteById(Long id);
-	
+
 	Optional<Event> update(String eventName, String eventAddress, Long id);
 }
-
-

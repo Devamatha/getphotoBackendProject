@@ -84,7 +84,10 @@ public class PhotoGrapherController {
 	@DeleteMapping("/delete/{photographer_Id}")
 	public ResponseEntity<Void> deleteById(@PathVariable("photographer_Id") Long id) {
 		PhotoGrapher photoGrapher = photoGrapherService.fetchById(id);
+		
 		if (photoGrapher == null) {
+			System.out.println("Photographer Id is :"+photoGrapher);
+
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
 			photoGrapherService.deleteById(id);

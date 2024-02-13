@@ -1,5 +1,6 @@
 package com.techpixe.getphoto.serviceImpl;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -37,12 +38,10 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 	private String fromMail;
 
 	@Override
-	public PhotoGrapher registration(Long admin, String email, Long mobileNumber, String fullName)
-	{
+	public PhotoGrapher registration(Long admin, String email, Long mobileNumber, String fullName) {
 		Admin admin2 = adminRepository.findById(admin)
 				.orElseThrow(() -> new RuntimeException("Id is not present" + admin));
-		if (admin2 != null)
-		{
+		if (admin2 != null) {
 			System.out.println("id is  present" + admin2);
 			PhotoGrapher photoGrapher = new PhotoGrapher();
 			photoGrapher.setAdmin(admin2);
@@ -50,10 +49,11 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			photoGrapher.setMobileNumber(mobileNumber);
 			photoGrapher.setFullName(fullName);
 			photoGrapher.setRole("photographer");
+			photoGrapher.setRegistrationDate(LocalDate.now());
 			String password = generatePassword();
 			photoGrapher.setPassword(password);
-			
-			
+
+			photoGrapher = photoGrapherRepository.save(photoGrapher);
 			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 			simpleMailMessage.setFrom(fromMail);
 			simpleMailMessage.setTo(email);
@@ -64,7 +64,7 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 					+ "\n\n"
 					+ "you will be required to reset the temporary password upon login\n\n\n if you have any question or if you would like to request a call-back,please email us at support info@techpixe.com");
 			javaMailSender.send(simpleMailMessage);
-			return photoGrapherRepository.save(photoGrapher);
+			return photoGrapher;
 		} else {
 			System.out.println("id is not present");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin with this Id is not present" + admin);
@@ -75,20 +75,17 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 	private static final String LETTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	private static final String DIGITS = "0123456789";
 
-	public static String generatePassword()
-	{
+	public static String generatePassword() {
 		Random random = new Random();
 
 		StringBuilder lettersBuilder = new StringBuilder();
-		for (int i = 0; i < 4; i++) 
-		{
+		for (int i = 0; i < 4; i++) {
 			int index = random.nextInt(LETTERS.length());
 			lettersBuilder.append(LETTERS.charAt(index));
 		}
 
 		StringBuilder digitsBuilder = new StringBuilder();
-		for (int i = 0; i < 4; i++) 
-		{
+		for (int i = 0; i < 4; i++) {
 			int index = random.nextInt(DIGITS.length());
 			digitsBuilder.append(DIGITS.charAt(index));
 		}
@@ -156,7 +153,6 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 		photoGrapherRepository.deleteById(id);
 	}
 
-	
 	@Override
 	public Optional<PhotoGrapher> update(Long id, String email, Long mobileNumber, String password, String fullName) {
 		return photoGrapherRepository.findById(id).map(existingPhotoGrapher -> {

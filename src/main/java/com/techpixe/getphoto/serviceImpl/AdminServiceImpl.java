@@ -26,14 +26,14 @@ public class AdminServiceImpl implements AdminService {
 	private AdminRepository adminRepository;
 	@Autowired
 	private PhotoGrapherRepository PhotoGrapherRepository;
-	
-	//******forgot Password************
+
+	// ******forgot Password************
 	@Autowired
 	private JavaMailSender javaMailSender;
 
 	@Value("$(spring.mail.username)")
 	private String fromMail;
-	//*******forgot Password*************
+	// *******forgot Password*************
 
 	@Override
 	public Admin registerAdmin(String fullName, String email, Long mobileNumber, String password) {
@@ -110,14 +110,12 @@ public class AdminServiceImpl implements AdminService {
 	}
 
 //***************CHANGE PASSWORD*************************	
-	
+
 	@Override
-	public ResponseEntity<?> changePassword(Long admin_Id, String password, String confirmPassword)
-	{
+	public ResponseEntity<?> changePassword(Long admin_Id, String password, String confirmPassword) {
 		Admin user = adminRepository.findByPassword(password);
 		PhotoGrapher user1 = PhotoGrapherRepository.findByPassword(password);
-		if (user!=null && user.getPassword().equals(password)) 
-		{
+		if (user != null && user.getPassword().equals(password)) {
 //			Admin admin = new Admin();
 //			admin.setAdmin_Id(user.getAdmin_Id());
 //			admin.setFullName(user.getFullName());
@@ -128,9 +126,9 @@ public class AdminServiceImpl implements AdminService {
 //			
 //			Admin ad= adminRepository.save(admin);
 //			return ResponseEntity.ok(ad);
-			
-			//return adminRepository.save(admin);
-			
+
+			// return adminRepository.save(admin);
+
 			AdminDto adminDto = new AdminDto();
 			adminDto.setAdmin_Id(user.getAdmin_Id());
 			adminDto.setFullName(user.getFullName());
@@ -138,15 +136,12 @@ public class AdminServiceImpl implements AdminService {
 			adminDto.setMobileNumber(user.getMobileNumber());
 			adminDto.setRole(user.getRole());
 			adminDto.setPassword(confirmPassword);
-			
+
 			user.setPassword(confirmPassword);
 			adminRepository.save(user);
 			return ResponseEntity.ok(adminDto);
-			
-			
-		}
-		else if(user1!=null && user1.getPassword().equals(password))
-		{
+
+		} else if (user1 != null && user1.getPassword().equals(password)) {
 
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user1.getPhotographer_Id());
@@ -155,97 +150,89 @@ public class AdminServiceImpl implements AdminService {
 			photoGrapherDTo.setMobileNumber(user1.getMobileNumber());
 			photoGrapherDTo.setPassword(confirmPassword);
 			photoGrapherDTo.setRole(user1.getRole());
-			
+
 			user1.setPassword(confirmPassword);
 			PhotoGrapherRepository.save(user1);
 			return ResponseEntity.ok(photoGrapherDTo);
-		}
-		else
-		{
+		} else {
 			ErrorResponseDto error = new ErrorResponseDto();
 			error.setError("######################Password is not present#################");
-			//return ResponseEntity.internalServerError().body(error);
+			// return ResponseEntity.internalServerError().body(error);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 		}
 	}
-	
-	
-	
-	//*************FORGOT PASSWORD*****************
+
+	// *************FORGOT PASSWORD*****************
 
 	@Override
 	public ResponseEntity<?> forgotPassword(String email) {
-	    Admin admin = adminRepository.findByEmail(email);
-	    PhotoGrapher photoGrapher = PhotoGrapherRepository.findByEmail(email);
+		Admin admin = adminRepository.findByEmail(email);
+		PhotoGrapher photoGrapher = PhotoGrapherRepository.findByEmail(email);
 
-	    if (admin != null) {
-	    	AdminDto adminDTO = new AdminDto();
-	        adminDTO.setAdmin_Id(admin.getAdmin_Id());
-	        adminDTO.setFullName(admin.getFullName());
-	        adminDTO.setEmail(email);
-	        adminDTO.setMobileNumber(admin.getMobileNumber());
-	        adminDTO.setRole(admin.getRole());
+		if (admin != null) {
+			AdminDto adminDTO = new AdminDto();
+			adminDTO.setAdmin_Id(admin.getAdmin_Id());
+			adminDTO.setFullName(admin.getFullName());
+			adminDTO.setEmail(email);
+			adminDTO.setMobileNumber(admin.getMobileNumber());
+			adminDTO.setRole(admin.getRole());
 
-	        String password = generatePassword();
-	        adminDTO.setPassword(password);
+			String password = generatePassword();
+			adminDTO.setPassword(password);
 
-	        // Send email with new password
+			// Send email with new password
 
-	        // Save the updated admin entity with new password
-	        admin.setPassword(password);
-	        adminRepository.save(admin);
+			// Save the updated admin entity with new password
+			admin.setPassword(password);
+			adminRepository.save(admin);
 
-	        return ResponseEntity.ok(adminDTO);
-	    } else if (photoGrapher != null) {
-	    	PhotoGrapherDTo photoGrapherDTO = new PhotoGrapherDTo();
-	        photoGrapherDTO.setPhotographer_Id(photoGrapher.getPhotographer_Id());
-	        photoGrapherDTO.setFullName(photoGrapher.getFullName());
-	        photoGrapherDTO.setEmail(email);
-	        photoGrapherDTO.setMobileNumber(photoGrapher.getMobileNumber());
-	        photoGrapherDTO.setRole(photoGrapher.getRole());
+			return ResponseEntity.ok(adminDTO);
+		} else if (photoGrapher != null) {
+			PhotoGrapherDTo photoGrapherDTO = new PhotoGrapherDTo();
+			photoGrapherDTO.setPhotographer_Id(photoGrapher.getPhotographer_Id());
+			photoGrapherDTO.setFullName(photoGrapher.getFullName());
+			photoGrapherDTO.setEmail(email);
+			photoGrapherDTO.setMobileNumber(photoGrapher.getMobileNumber());
+			photoGrapherDTO.setRole(photoGrapher.getRole());
 
-	        String password = generatePassword();
-	        photoGrapherDTO.setPassword(password);
+			String password = generatePassword();
+			photoGrapherDTO.setPassword(password);
 
-	        // Send email with new password
+			// Send email with new password
 
-	        // Save the updated photographer entity with new password
-	        photoGrapher.setPassword(password);
-	        PhotoGrapherRepository.save(photoGrapher); 
+			// Save the updated photographer entity with new password
+			photoGrapher.setPassword(password);
+			PhotoGrapherRepository.save(photoGrapher);
 
-	        return ResponseEntity.ok(photoGrapherDTO);
-	    } else {
-	        ErrorResponseDto errorResponseDto = new ErrorResponseDto();
-	        errorResponseDto.setError("Email is not matching");
-	        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDto);
-	    }
+			return ResponseEntity.ok(photoGrapherDTO);
+		} else {
+			ErrorResponseDto errorResponseDto = new ErrorResponseDto();
+			errorResponseDto.setError("Email is not matching");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDto);
+		}
 	}
 
-	//**********Generate Random Password ********************
+	// **********Generate Random Password ********************
 	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
-    private static final String NUMERIC_STRING = "0123456789";
+	private static final String NUMERIC_STRING = "0123456789";
 
-    public static String generatePassword()
-    {
-        StringBuilder builder = new StringBuilder();
-        Random random = new Random();
+	public static String generatePassword() {
+		StringBuilder builder = new StringBuilder();
+		Random random = new Random();
 
-        // Generate 4 random alphabets
-        for (int i = 0; i < 4; i++)
-        {
-            int index = random.nextInt(ALPHA_NUMERIC_STRING.length());
-            builder.append(ALPHA_NUMERIC_STRING.charAt(index));
-        }
+		// Generate 4 random alphabets
+		for (int i = 0; i < 4; i++) {
+			int index = random.nextInt(ALPHA_NUMERIC_STRING.length());
+			builder.append(ALPHA_NUMERIC_STRING.charAt(index));
+		}
 
-        // Generate 4 random digits
-        for (int i = 0; i < 4; i++)
-        {
-            int index = random.nextInt(NUMERIC_STRING.length());
-            builder.append(NUMERIC_STRING.charAt(index));
-        }
+		// Generate 4 random digits
+		for (int i = 0; i < 4; i++) {
+			int index = random.nextInt(NUMERIC_STRING.length());
+			builder.append(NUMERIC_STRING.charAt(index));
+		}
 
-        return builder.toString();
-    }
-
+		return builder.toString();
+	}
 
 }
