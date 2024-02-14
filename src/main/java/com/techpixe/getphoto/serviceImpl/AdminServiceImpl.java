@@ -27,13 +27,11 @@ public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private PhotoGrapherRepository PhotoGrapherRepository;
 
-	// ******forgot Password************
 	@Autowired
 	private JavaMailSender javaMailSender;
 
 	@Value("$(spring.mail.username)")
 	private String fromMail;
-	// *******forgot Password*************
 
 	@Override
 	public Admin registerAdmin(String fullName, String email, Long mobileNumber, String password) {
@@ -116,18 +114,6 @@ public class AdminServiceImpl implements AdminService {
 		Admin user = adminRepository.findByPassword(password);
 		PhotoGrapher user1 = PhotoGrapherRepository.findByPassword(password);
 		if (user != null && user.getPassword().equals(password)) {
-//			Admin admin = new Admin();
-//			admin.setAdmin_Id(user.getAdmin_Id());
-//			admin.setFullName(user.getFullName());
-//			admin.setEmail(user.getEmail());
-//			admin.setMobileNumber(user.getMobileNumber());
-//			admin.setRole(user.getRole());
-//			admin.setPassword(confirmPassword);
-//			
-//			Admin ad= adminRepository.save(admin);
-//			return ResponseEntity.ok(ad);
-
-			// return adminRepository.save(admin);
 
 			AdminDto adminDto = new AdminDto();
 			adminDto.setAdmin_Id(user.getAdmin_Id());
@@ -179,10 +165,6 @@ public class AdminServiceImpl implements AdminService {
 
 			String password = generatePassword();
 			adminDTO.setPassword(password);
-
-			// Send email with new password
-
-			// Save the updated admin entity with new password
 			admin.setPassword(password);
 			adminRepository.save(admin);
 
@@ -197,10 +179,6 @@ public class AdminServiceImpl implements AdminService {
 
 			String password = generatePassword();
 			photoGrapherDTO.setPassword(password);
-
-			// Send email with new password
-
-			// Save the updated photographer entity with new password
 			photoGrapher.setPassword(password);
 			PhotoGrapherRepository.save(photoGrapher);
 
@@ -220,13 +198,10 @@ public class AdminServiceImpl implements AdminService {
 		StringBuilder builder = new StringBuilder();
 		Random random = new Random();
 
-		// Generate 4 random alphabets
 		for (int i = 0; i < 4; i++) {
 			int index = random.nextInt(ALPHA_NUMERIC_STRING.length());
 			builder.append(ALPHA_NUMERIC_STRING.charAt(index));
 		}
-
-		// Generate 4 random digits
 		for (int i = 0; i < 4; i++) {
 			int index = random.nextInt(NUMERIC_STRING.length());
 			builder.append(NUMERIC_STRING.charAt(index));

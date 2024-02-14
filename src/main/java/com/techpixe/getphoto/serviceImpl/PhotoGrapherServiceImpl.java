@@ -166,11 +166,5 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 		});
 	}
 
-//	@Override
-//	public ResponseEntity<?> forgotPassword(String email)
-//	{
-//		
-//		return null;
-//	}
 
 }

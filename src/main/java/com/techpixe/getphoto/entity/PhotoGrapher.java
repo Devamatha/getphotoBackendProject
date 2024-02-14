@@ -33,8 +33,6 @@ public class PhotoGrapher
 	
 	private String fullName;
 	
-	@ManyToOne(fetch= FetchType.LAZY)
-	@JoinColumn(name="admin_Id")
     private LocalDate registrationDate;
 
 	@ManyToOne(fetch = FetchType.EAGER)
