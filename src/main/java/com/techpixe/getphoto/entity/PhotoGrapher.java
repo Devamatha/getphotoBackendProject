@@ -35,6 +35,7 @@ public class PhotoGrapher
 	
     private LocalDate registrationDate;
 
+    
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "admin_Id")
 	private Admin admin;
