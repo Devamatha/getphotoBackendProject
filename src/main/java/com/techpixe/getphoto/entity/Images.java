@@ -1,6 +1,8 @@
 package com.techpixe.getphoto.entity;
 
-import jakarta.persistence.Column;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -9,29 +11,30 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
-public class ImageStoring 
+public class Images 
 {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
-	private String type;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long image_Id;
 
-	@Lob
-	@Column(length=1000)
-	private byte[] image;
-	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "event_Id")
-	private Event event;
+    private String type;
+    private String filePath;
+    
+    @JsonBackReference
+    @ManyToOne(fetch= FetchType.EAGER)
+    @JoinColumn(name="event_Id")
+    private Event event;
 
 }

@@ -1,5 +1,6 @@
 package com.techpixe.getphoto.controller;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,10 +19,22 @@ import com.techpixe.getphoto.service.AdminService;
 public class AdminController {
 	@Autowired
 	private AdminService adminService;
+	
+	/*
+	 * LOG 4J 
+	 */
+	private static final Logger logger = Logger.getLogger(AdminController.class);
 
+	
+	
 	@PostMapping("/registration")
 	public ResponseEntity<Admin> registerAdmin(@RequestParam String fullName, @RequestParam String email,
 			@RequestParam Long mobileNumber, @RequestParam String password) {
+		
+		logger.debug("Registration is Successful");
+		logger.info("request goes to controller to serviceImplementation Class");
+		logger.error("Runtime Exception");
+		
 		Admin registeredAdmin = adminService.registerAdmin(fullName, email, mobileNumber, password);
 		return new ResponseEntity<Admin>(registeredAdmin, HttpStatus.CREATED);
 	}
@@ -108,11 +121,5 @@ public class AdminController {
 		}
 	}
 	
-
-
-//	private boolean isMobileNumber(String emailOrMobileNumber)
-//	{
-//		return emailOrMobileNumber.matches("\\d+");
-//	}
 	
 }

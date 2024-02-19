@@ -24,6 +24,7 @@ import com.techpixe.getphoto.service.AdminService;
 public class AdminServiceImpl implements AdminService {
 	@Autowired
 	private AdminRepository adminRepository;
+	
 	@Autowired
 	private PhotoGrapherRepository PhotoGrapherRepository;
 
@@ -165,6 +166,7 @@ public class AdminServiceImpl implements AdminService {
 
 			String password = generatePassword();
 			adminDTO.setPassword(password);
+			
 			admin.setPassword(password);
 			adminRepository.save(admin);
 
