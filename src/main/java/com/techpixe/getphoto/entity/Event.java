@@ -41,11 +41,14 @@ public class Event {
 	@Lob
 	@Column(columnDefinition = "longblob", name = "qrCode", nullable = false)
 	private byte[] qrCode;
+	
+	
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "photographer_Id")
 	private PhotoGrapher photoGrapher;
 
+	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
 	private List<ImageStoring> imageStoring = new ArrayList<>();

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.sql.Date;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,23 +18,29 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techpixe.getphoto.entity.Event;
+import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.service.EventService;
-
+import com.techpixe.getphoto.util.ImageUtils;
 
 @RestController
 @RequestMapping("/event")
 public class EventController {
 	@Autowired
 	private EventService eventService;
-	public static final Logger logger = Logger.getLogger(EventController.class);
-//	{
-//		BasicConfigurator.configure();
-//	}
 
+	private static final Logger logger=Logger.getLogger(EventController.class);
+	
 	@GetMapping("/get/{event_Id}")
 	public ResponseEntity<?> fetchByEventId(@PathVariable("event_Id") Long id) {
 		Event fetchById = eventService.fetchById(id);
-		logger.debug("fetching the details by Id" + fetchById);
+		for (ImageStoring image : fetchById.getImageStoring()) {
+			
+			byte[] decompressedImage = ImageUtils.decompressImage(image.getImage());
+			logger.debug("Hloo world");
+			logger.error("eroro");
+			logger.info("Hlo hhhadsd");
+			image.setImage(decompressedImage);
+		}
 		return ResponseEntity.ok(fetchById);
 	}
 
@@ -73,8 +78,9 @@ public class EventController {
 
 	@PutMapping("/update/{event_Id}")
 	public ResponseEntity<Event> update(@RequestParam(required = false) String eventName,
-			@RequestParam(required = false) String eventAddress, @PathVariable("event_Id") Long id) {
-		Optional<Event> updatedEvent = eventService.update(eventName, eventAddress, id);
+			@RequestParam(required = false) String eventAddress, @RequestParam(required = false) Date eventDate,
+			@PathVariable("event_Id") Long id) {
+		Optional<Event> updatedEvent = eventService.update(eventName, eventAddress, eventDate, id);
 		return updatedEvent.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 }

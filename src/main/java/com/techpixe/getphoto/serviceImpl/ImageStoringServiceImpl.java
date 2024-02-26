@@ -1,6 +1,7 @@
 package com.techpixe.getphoto.serviceImpl;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,30 +22,36 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 	@Autowired
 	private EventRepository eventRepository;
 
-	
-	
 	@Override
 	public String uploadImage(Long event, MultipartFile image) throws IOException {
-	    Event eventId = eventRepository.findById(event)
-	                .orElseThrow(() -> new RuntimeException("Event with ID " + event + " not found"));
+		Event eventId = eventRepository.findById(event)
+				.orElseThrow(() -> new RuntimeException("Event with ID " + event + " not found"));
 
-	    if (eventId != null) {
-	        System.out.println("event ID: " + eventId.getEvent_Id());
-	        byte[] compressedImage = ImageUtils.compressImage(image.getBytes());
-	        ImageStoring imageData = ImageStoring.builder()
-	                                             .type(image.getContentType())
-	                                             .image(compressedImage)
-	                                             .event(eventId) 
-	                                             .build();
+		if (eventId != null) {
+			System.out.println("event ID: " + eventId.getEvent_Id());
+			byte[] compressedImage = ImageUtils.compressImage(image.getBytes());
+			ImageStoring imageData = ImageStoring.builder().type(image.getContentType()).image(compressedImage)
+					.event(eventId).build();
 
-	        ImageStoring savedImage = imageStoringRepository.save(imageData);
+			ImageStoring savedImage = imageStoringRepository.save(imageData);
 
-	        if (savedImage != null) {
-	            return "File uploaded successfully: " + image.getOriginalFilename() + " with Event ID: " + event;
-	        }
-	    }
+			if (savedImage != null) {
+				return "File uploaded successfully: " + image.getOriginalFilename() + " with Event ID: " + event;
+			}
+		}
 
-	    return null;
+		return null;
+	}
+
+	@Override
+	public void deleteimage(long id) {
+		imageStoringRepository.deleteById(id);
+	}
+
+	@Override
+	public ImageStoring fetchById(Long id) {
+
+		return imageStoringRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
 	}
 
 }

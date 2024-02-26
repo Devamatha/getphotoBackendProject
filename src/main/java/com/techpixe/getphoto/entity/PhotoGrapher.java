@@ -38,11 +38,12 @@ public class PhotoGrapher {
 	private String fullName;
 
 	private LocalDate registrationDate;
+	private String role;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "admin_Id")
 	private Admin admin;
-	private String role;
+	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "photoGrapher", fetch = FetchType.EAGER)
 	private List<Event> event = new ArrayList<>();

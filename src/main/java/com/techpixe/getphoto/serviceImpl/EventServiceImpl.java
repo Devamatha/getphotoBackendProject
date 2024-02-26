@@ -131,10 +131,11 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Optional<Event> update(String eventName, String eventAddress, Long id) {
+	public Optional<Event> update(String eventName, String eventAddress,Date eventDate, Long id) {
 		return eventRepository.findById(id).map(existingEvent -> {
 			existingEvent.setEventName(eventName != null ? eventName : existingEvent.getEventName());
 			existingEvent.setEventAddress(eventAddress != null ? eventAddress : existingEvent.getEventAddress());
+			existingEvent.setEventDate(eventDate !=null ? eventDate :existingEvent.getEventDate());
 			return eventRepository.save(existingEvent);
 
 		});

@@ -28,7 +28,6 @@ public class ImageStoring {
 	private String type;
 
 	@Lob
-	@Column(length=1000)
 	private byte[] image;
 	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER)
