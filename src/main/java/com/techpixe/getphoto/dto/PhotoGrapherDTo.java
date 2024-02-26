@@ -1,27 +1,20 @@
 package com.techpixe.getphoto.dto;
 
-public class AdminDto {
-	private Long admin_Id;
-	private String fullName;
+public class PhotoGrapherDTo {
+	private Long photographer_Id;
 	private String email;
+
 	private Long mobileNumber;
 	private String password;
+	private String fullName;
 	private String role;
 
-	public Long getAdmin_Id() {
-		return admin_Id;
+	public Long getPhotographer_Id() {
+		return photographer_Id;
 	}
 
-	public void setAdmin_Id(Long admin_Id) {
-		this.admin_Id = admin_Id;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setPhotographer_Id(Long photographer_Id) {
+		this.photographer_Id = photographer_Id;
 	}
 
 	public String getEmail() {
@@ -46,6 +39,14 @@ public class AdminDto {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getFullName() {
+		return fullName;
+	}
+
+	public void setFullName(String fullName) {
+		this.fullName = fullName;
 	}
 
 	public String getRole() {

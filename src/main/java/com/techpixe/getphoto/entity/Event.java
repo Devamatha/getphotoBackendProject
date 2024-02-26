@@ -1,9 +1,10 @@
 package com.techpixe.getphoto.entity;
 
-import java.time.LocalDate;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -13,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
@@ -23,29 +25,32 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class PhotoGrapher {
+
+public class Event {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long photographer_Id;
-	@Column(name = "email", unique = true, nullable = false)
-	private String email;
+	private Long event_Id;
 
-	@Column(name = "mobileNumber", unique = true, nullable = false)
-	private Long mobileNumber;
+	@Column(name = "event_Name", nullable = false)
+	private String eventName;
 
-	private String password;
+	@Column(name = "event_Address", nullable = false)
+	private String eventAddress;
 
-	private String fullName;
-
-	private LocalDate registrationDate;
-	private String role;
-
+	private Date eventDate;
+	@Lob
+	@Column(columnDefinition = "longblob", name = "qrCode", nullable = false)
+	private byte[] qrCode;
+	
+	
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "admin_Id")
-	private Admin admin;
+	@JoinColumn(name = "photographer_Id")
+	private PhotoGrapher photoGrapher;
+
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy = "photoGrapher", fetch = FetchType.EAGER)
-	private List<Event> event = new ArrayList<>();
+	@OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
+	private List<ImageStoring> imageStoring = new ArrayList<>();
 
 }
