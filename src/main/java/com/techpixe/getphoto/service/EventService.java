@@ -17,5 +17,5 @@ public interface EventService {
 
 	void deleteById(Long id);
 
-	Optional<Event> update(String eventName, String eventAddress, Long id);
+	Optional<Event> update(String eventName, String eventAddress,Date eventDate, Long id);
 }

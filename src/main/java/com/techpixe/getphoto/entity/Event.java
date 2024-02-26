@@ -49,7 +49,7 @@ public class Event {
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "photographer_Id")
 	private PhotoGrapher photoGrapher;
-	
+
 	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "event", fetch = FetchType.EAGER)

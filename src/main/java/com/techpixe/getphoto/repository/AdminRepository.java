@@ -8,7 +8,7 @@ public interface AdminRepository extends JpaRepository<Admin, Long> {
 	Admin findByEmail(String email);
 
 	Admin findByMobileNumber(Long mobileNumber);
-	
+
 	Admin findByPassword(String password);
 
 }

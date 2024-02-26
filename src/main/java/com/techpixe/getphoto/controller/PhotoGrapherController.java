@@ -23,10 +23,9 @@ import com.techpixe.getphoto.service.PhotoGrapherService;
 @RestController
 @RequestMapping("/client")
 public class PhotoGrapherController {
-	
+
 	private static final Logger logger = Logger.getLogger(PhotoGrapherController.class);
 
-	
 	@Autowired
 	private PhotoGrapherService photoGrapherService;
 
@@ -35,16 +34,16 @@ public class PhotoGrapherController {
 	public ResponseEntity<?> addRegisterion(@PathVariable Long admin, @RequestParam String email,
 			@RequestParam Long mobileNumber, @RequestParam String fullName) {
 		try {
-			
+
 			logger.debug("PhotoGrapher Registration is Successfull");
-			
+
 			PhotoGrapher registration = photoGrapherService.registration(admin, email, mobileNumber, fullName);
 
 			return ResponseEntity.ok(registration);
 		} catch (Exception e) {
-			
+
 			logger.error("PhotoGrapher Registration is Unsuccessfull");
-			
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Procesing in the request");
 
 		}

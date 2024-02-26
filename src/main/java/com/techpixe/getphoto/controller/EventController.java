@@ -96,11 +96,11 @@ public class EventController {
 
 	@PutMapping("/update/{event_Id}")
 	public ResponseEntity<Event> update(@RequestParam(required = false) String eventName,
-			@RequestParam(required = false) String eventAddress, @PathVariable("event_Id") Long id) {
+			@RequestParam(required = false) String eventAddress,@RequestParam(required=false) Date eventDate, @PathVariable("event_Id") Long id) {
 		
 		logger.debug("Event is pdated Succesfully");
 		
-		Optional<Event> updatedEvent = eventService.update(eventName, eventAddress, id);
+		Optional<Event> updatedEvent = eventService.update(eventName, eventAddress, eventDate, id);
 		return updatedEvent.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
 }

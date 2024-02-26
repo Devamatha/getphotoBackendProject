@@ -21,9 +21,9 @@ public interface PhotoGrapherService {
 	List<PhotoGrapher> fetchAll();
 
 	Optional<PhotoGrapher> update(Long id, String email, Long mobileNumber, String password, String fullName);
-	
-	//************Forgot Password***************
-	
-	//ResponseEntity<?> forgotPassword(String email);
+
+	// ************Forgot Password***************
+
+	// ResponseEntity<?> forgotPassword(String email);
 
 }

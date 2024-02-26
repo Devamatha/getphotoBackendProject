@@ -1,6 +1,7 @@
 package com.techpixe.getphoto.serviceImpl;
 
 import java.io.IOException;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,18 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 
 		return null;
 	}
+
+	@Override
+	public void deleteimage(long id) {
+		imageStoringRepository.deleteById(id);
+	}
+
+	@Override
+	public ImageStoring fetchById(Long id) {
+
+		return imageStoringRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
+
+	}
+
 
 }

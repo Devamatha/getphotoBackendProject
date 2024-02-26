@@ -21,10 +21,9 @@ import com.techpixe.getphoto.service.ImageService;
 
 @Service
 public class ImageServiceImpl implements ImageService {
-	
+
 	private static final Logger logger = Logger.getLogger(ImageServiceImpl.class);
 
-	
 	@Autowired
 	private ImagesRepository imagesRepository;
 
@@ -40,12 +39,11 @@ public class ImageServiceImpl implements ImageService {
 		Event eventId = eventRepository.findById(event)
 				.orElseThrow(() -> new RuntimeException(" Event id is not present"));
 		if (eventId != null) {
-			
+
 			logger.debug("Image is Uploaded Successfully based on Event");
 			logger.info("Request comes from Image Controller to Image ServiceImpl through Image Service");
-			
-			
-			System.out.println("Event is present"+event);
+
+			System.out.println("Event is present" + event);
 			Images images = new Images();
 			images.setType(file.getContentType());
 			images.setFilePath(filePath);
@@ -55,9 +53,9 @@ public class ImageServiceImpl implements ImageService {
 
 			return imagesRepository.save(images);
 		} else {
-			
+
 			logger.error("Image is not uploaded Successfully && Event is not present");
-			
+
 			System.out.println("Event Id is not present");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with this Id is not present");
 
