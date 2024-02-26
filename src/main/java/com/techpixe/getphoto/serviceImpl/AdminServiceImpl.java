@@ -2,6 +2,7 @@ package com.techpixe.getphoto.serviceImpl;
 
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.techpixe.getphoto.controller.AdminController;
 import com.techpixe.getphoto.dto.AdminDto;
 import com.techpixe.getphoto.dto.ErrorResponseDto;
 import com.techpixe.getphoto.dto.PhotoGrapherDTo;
@@ -22,9 +24,12 @@ import com.techpixe.getphoto.service.AdminService;
 
 @Service
 public class AdminServiceImpl implements AdminService {
+	
+	private static final Logger logger = Logger.getLogger(AdminServiceImpl.class);
+	
 	@Autowired
 	private AdminRepository adminRepository;
-	
+
 	@Autowired
 	private PhotoGrapherRepository PhotoGrapherRepository;
 
@@ -36,6 +41,9 @@ public class AdminServiceImpl implements AdminService {
 
 	@Override
 	public Admin registerAdmin(String fullName, String email, Long mobileNumber, String password) {
+		
+		logger.debug("Admin Registration is Successfully Completed");
+		
 		Admin admin = new Admin();
 		admin.setFullName(fullName);
 		admin.setEmail(email);
@@ -51,6 +59,10 @@ public class AdminServiceImpl implements AdminService {
 		PhotoGrapher user1 = PhotoGrapherRepository.findByMobileNumber(mobileNumber);
 
 		if (user != null && user.getPassword().equals(password)) {
+			
+			logger.debug("Admin Login is Succesfull through Mobile Number");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
 			AdminDto applicationFormDTo = new AdminDto();
 			applicationFormDTo.setAdmin_Id(user.getAdmin_Id());
 			applicationFormDTo.setFullName(user.getFullName());
@@ -61,6 +73,10 @@ public class AdminServiceImpl implements AdminService {
 
 			return ResponseEntity.ok(applicationFormDTo);
 		} else if (user1 != null && user1.getPassword().equals(password)) {
+			
+			logger.debug("Photographer Login is Succesfull through Mobile Number");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user1.getPhotographer_Id());
 			photoGrapherDTo.setFullName(user1.getFullName());
@@ -70,6 +86,9 @@ public class AdminServiceImpl implements AdminService {
 			photoGrapherDTo.setRole(user1.getRole());
 			return ResponseEntity.ok(photoGrapherDTo);
 		} else {
+			
+			logger.error("Invalid mobile number or password");
+			
 			ErrorResponseDto errorResponse = new ErrorResponseDto();
 			errorResponse.setError("Invalid mobile number or password");
 			return ResponseEntity.internalServerError().body(errorResponse);
@@ -82,6 +101,11 @@ public class AdminServiceImpl implements AdminService {
 		PhotoGrapher user1 = PhotoGrapherRepository.findByEmail(email);
 
 		if (user != null && user.getPassword().equals(password)) {
+			
+			logger.debug("Admin Login is Succesfull through E-Mail");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
+			
 			AdminDto applicationFormDTo = new AdminDto();
 			applicationFormDTo.setAdmin_Id(user.getAdmin_Id());
 			applicationFormDTo.setFullName(user.getFullName());
@@ -92,6 +116,11 @@ public class AdminServiceImpl implements AdminService {
 			return ResponseEntity.ok(applicationFormDTo);
 
 		} else if (user1 != null && user1.getPassword().equals(password)) {
+			
+			logger.debug("PhotoGrapher Login is Succesfull through E-Mail");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
+			
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user1.getPhotographer_Id());
 			photoGrapherDTo.setFullName(user1.getFullName());
@@ -102,20 +131,28 @@ public class AdminServiceImpl implements AdminService {
 
 			return ResponseEntity.ok(photoGrapherDTo);
 		} else {
+			
+			logger.error("Invalid E-Mail or password");
+			
 			ErrorResponseDto errorResponse = new ErrorResponseDto();
 			errorResponse.setError("Invalid email or password");
 			return ResponseEntity.internalServerError().body(errorResponse);
 		}
 	}
 
-//***************CHANGE PASSWORD*************************	
+	// ***************CHANGE PASSWORD*************************
 
 	@Override
 	public ResponseEntity<?> changePassword(Long admin_Id, String password, String confirmPassword) {
-		Admin user = adminRepository.findByPassword(password);
-		PhotoGrapher user1 = PhotoGrapherRepository.findByPassword(password);
+		Admin user = adminRepository.findById(admin_Id).orElse(null);
+		PhotoGrapher user1 = PhotoGrapherRepository.findById(admin_Id)
+				.orElseThrow(() -> new RuntimeException("photographer is not present: " + admin_Id));
 		if (user != null && user.getPassword().equals(password)) {
 
+			logger.debug("Admin Password is Successfully Changed");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
+			
 			AdminDto adminDto = new AdminDto();
 			adminDto.setAdmin_Id(user.getAdmin_Id());
 			adminDto.setFullName(user.getFullName());
@@ -130,6 +167,9 @@ public class AdminServiceImpl implements AdminService {
 
 		} else if (user1 != null && user1.getPassword().equals(password)) {
 
+			logger.debug("PhotoGrapher Password is Successfully Changed");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
 			PhotoGrapherDTo photoGrapherDTo = new PhotoGrapherDTo();
 			photoGrapherDTo.setPhotographer_Id(user1.getPhotographer_Id());
 			photoGrapherDTo.setFullName(user1.getFullName());
@@ -142,6 +182,9 @@ public class AdminServiceImpl implements AdminService {
 			PhotoGrapherRepository.save(user1);
 			return ResponseEntity.ok(photoGrapherDTo);
 		} else {
+			
+			logger.error("Password and Confirm Password are not Matching");
+			
 			ErrorResponseDto error = new ErrorResponseDto();
 			error.setError("######################Password is not present#################");
 			// return ResponseEntity.internalServerError().body(error);
@@ -157,6 +200,10 @@ public class AdminServiceImpl implements AdminService {
 		PhotoGrapher photoGrapher = PhotoGrapherRepository.findByEmail(email);
 
 		if (admin != null) {
+			
+			logger.debug("Admin : Password will be sent to E-Mail Number");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
 			AdminDto adminDTO = new AdminDto();
 			adminDTO.setAdmin_Id(admin.getAdmin_Id());
 			adminDTO.setFullName(admin.getFullName());
@@ -166,12 +213,16 @@ public class AdminServiceImpl implements AdminService {
 
 			String password = generatePassword();
 			adminDTO.setPassword(password);
-			
+
 			admin.setPassword(password);
 			adminRepository.save(admin);
 
 			return ResponseEntity.ok(adminDTO);
 		} else if (photoGrapher != null) {
+			
+			logger.debug("PhotoGrapher : Password will be sent to E-Mail Number");
+			logger.info("Request comes from Admin Controller to Admin ServiceImpl through Service");
+			
 			PhotoGrapherDTo photoGrapherDTO = new PhotoGrapherDTo();
 			photoGrapherDTO.setPhotographer_Id(photoGrapher.getPhotographer_Id());
 			photoGrapherDTO.setFullName(photoGrapher.getFullName());
@@ -184,8 +235,21 @@ public class AdminServiceImpl implements AdminService {
 			photoGrapher.setPassword(password);
 			PhotoGrapherRepository.save(photoGrapher);
 
+			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+			simpleMailMessage.setFrom(fromMail);
+			simpleMailMessage.setTo(email);
+			simpleMailMessage.setSubject("Registration completed Successfully in GetPhoto application\n");
+			simpleMailMessage.setText("Dear " + photoGrapher.getFullName()
+					+ "\n\nPlease check your  email and generted passowrd\n UserEmail  :" + email + "\n  MobileNumber :"
+					+ photoGrapher.getMobileNumber() + "\n New Password   :" + password + "\n\n"
+					+ "you will be required to reset the New password upon login\n\n\n if you have any question or if you would like to request a call-back,please email us at support info@techpixe.com");
+			javaMailSender.send(simpleMailMessage);
+
 			return ResponseEntity.ok(photoGrapherDTO);
 		} else {
+			
+			logger.error("****Invalid Email****");
+			
 			ErrorResponseDto errorResponseDto = new ErrorResponseDto();
 			errorResponseDto.setError("Email is not matching");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponseDto);

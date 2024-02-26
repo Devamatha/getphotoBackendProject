@@ -1,5 +1,7 @@
 package com.techpixe.getphoto.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,7 +31,7 @@ public class ImageStoring
 	@Lob
 	@Column(length=1000)
 	private byte[] image;
-	
+
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "event_Id")
 	private Event event;

@@ -27,7 +27,7 @@ public class Admin {
 	@Column(name = "fullName", nullable = false)
 	@Pattern(regexp = "^[A-Za-z]+$", message = "Full name can only contain alphabets")
 	private String fullName;
-	
+
 	@Column(name = "email", unique = true, nullable = false)
 	@Email(message = "Please provide a valid email address")
 	@Pattern(regexp = ".+@.+\\..+", message = "Email address must contain @ symbol")
@@ -43,6 +43,5 @@ public class Admin {
 	private String password;
 
 	private String role;
-
 
 }

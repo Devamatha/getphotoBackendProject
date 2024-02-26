@@ -19,49 +19,37 @@ import com.techpixe.getphoto.service.AdminService;
 public class AdminController {
 	@Autowired
 	private AdminService adminService;
-	
+
 	/*
-	 * LOG 4J 
+	 * LOG 4J
 	 */
 	private static final Logger logger = Logger.getLogger(AdminController.class);
 
-	
-	
 	@PostMapping("/registration")
 	public ResponseEntity<Admin> registerAdmin(@RequestParam String fullName, @RequestParam String email,
 			@RequestParam Long mobileNumber, @RequestParam String password) {
-		
+
 		logger.debug("Registration is Successful");
-		logger.info("request goes to controller to serviceImplementation Class");
-		logger.error("Runtime Exception");
-		
+		logger.info("request goes to controller to service Class");
+
 		Admin registeredAdmin = adminService.registerAdmin(fullName, email, mobileNumber, password);
 		return new ResponseEntity<Admin>(registeredAdmin, HttpStatus.CREATED);
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestParam String emailOrMobileNumber, @RequestParam String password) 
-	{
-		if (emailOrMobileNumber != null) 
-		{
-			if (isEmail(emailOrMobileNumber)) 
-			{
+	public ResponseEntity<?> login(@RequestParam String emailOrMobileNumber, @RequestParam String password) {
+		if (emailOrMobileNumber != null) {
+			if (isEmail(emailOrMobileNumber)) {
 				return adminService.loginByEmail(emailOrMobileNumber, password);
-			} 
-			else if (isMobileNumber(emailOrMobileNumber)) 
-			{
+			} else if (isMobileNumber(emailOrMobileNumber)) {
 				return adminService.loginByMobileNumber(Long.parseLong(emailOrMobileNumber), password);
-			} 
-			else 
-			{
+			} else {
 				ErrorResponseDto errorResponse = new ErrorResponseDto();
 				errorResponse
 						.setError("Invalid emailOrMobileNumber format. Please provide a valid email or mobile number.");
 				return ResponseEntity.internalServerError().body(errorResponse);
 			}
-		}
-		else 
-		{
+		} else {
 			ErrorResponseDto errorResponse = new ErrorResponseDto();
 			errorResponse.setError("Invalid input. Email or mobile number must be provided.");
 			return ResponseEntity.internalServerError().body(errorResponse);
@@ -69,57 +57,43 @@ public class AdminController {
 
 	}
 
-	private boolean isEmail(String emailOrMobileNumber)
-	{
+	private boolean isEmail(String emailOrMobileNumber) {
 		return emailOrMobileNumber.contains("@");
 	}
 
-	private boolean isMobileNumber(String emailOrMobileNumber) 
-	{
+	private boolean isMobileNumber(String emailOrMobileNumber) {
 		return emailOrMobileNumber.matches("\\d+");
 	}
-	
-	
-	//************Change Password***************
+
+	// ************Change Password***************
 	@PostMapping("/changepassword/{admin_Id}")
-	public ResponseEntity<?> changePassword(@PathVariable Long admin_Id,@RequestParam String password, @RequestParam String confirmPassword)
-	{
-		if (password!=null && confirmPassword !=null) 
-		{
-			return adminService.changePassword(admin_Id,password, confirmPassword);
-		}
-		else
-		{
+	public ResponseEntity<?> changePassword(@PathVariable Long admin_Id, @RequestParam String password,
+			@RequestParam String confirmPassword) {
+		if (password != null && confirmPassword != null) {
+			return adminService.changePassword(admin_Id, password, confirmPassword);
+		} else {
 			ErrorResponseDto error = new ErrorResponseDto();
 			error.setError("*********Password is not present*************");
 			return ResponseEntity.internalServerError().body(error);
 		}
 	}
-	
-	//*************FORGOT PASSWORD****************
+
+	// *************FORGOT PASSWORD****************
 	@PostMapping("/forgotPassword")
-	public ResponseEntity<?> forgotPassword(@RequestParam String email)
-	{
-		if (email!=null)
-		{
-			if (isEmail(email))
-			{
+	public ResponseEntity<?> forgotPassword(@RequestParam String email) {
+		if (email != null) {
+			if (isEmail(email)) {
 				return adminService.forgotPassword(email);
-			}
-			else
-			{
+			} else {
 				ErrorResponseDto error = new ErrorResponseDto();
 				error.setError("*********Invalid Email Pattern *************");
 				return ResponseEntity.internalServerError().body(error);
 			}
-		}
-		else
-		{
+		} else {
 			ErrorResponseDto error = new ErrorResponseDto();
 			error.setError("*********Email is not present*************");
 			return ResponseEntity.internalServerError().body(error);
 		}
 	}
-	
-	
+
 }

@@ -6,6 +6,7 @@ import java.nio.file.Files;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -19,57 +20,59 @@ import com.techpixe.getphoto.repository.ImagesRepository;
 import com.techpixe.getphoto.service.ImageService;
 
 @Service
-public class ImageServiceImpl implements ImageService
-{
-	@Autowired
-    private ImagesRepository imagesRepository;
+public class ImageServiceImpl implements ImageService {
 	
+	private static final Logger logger = Logger.getLogger(ImageServiceImpl.class);
+
+	
+	@Autowired
+	private ImagesRepository imagesRepository;
+
 	@Autowired
 	private EventRepository eventRepository;
 
-    private final String FOLDER_PATH="C:\\GP\\";
-    
-    
-    
-    
-    @Override
-	public Images uploadImageToFileSystem(MultipartFile file, Long event) throws IOException
-    {
-    	String filePath=FOLDER_PATH+file.getOriginalFilename();
-    	
-    	
-    	Event eventId= eventRepository.findById(event).orElseThrow(()-> new RuntimeException(" Event id is not present"));
-    	if (eventId!=null)
-    	{
-    		Images images = new Images();
-        	images.setType(file.getContentType());
-        	images.setFilePath(filePath);
-        	images.setEvent(eventId);
-        	
-        	file.transferTo(new File(filePath));
-        	
-        	return imagesRepository.save(images);
+	private final String FOLDER_PATH = "C:\\GP\\";
+
+	@Override
+	public Images uploadImageToFileSystem(MultipartFile file, Long event) throws IOException {
+		String filePath = FOLDER_PATH + file.getOriginalFilename();
+
+		Event eventId = eventRepository.findById(event)
+				.orElseThrow(() -> new RuntimeException(" Event id is not present"));
+		if (eventId != null) {
+			
+			logger.debug("Image is Uploaded Successfully based on Event");
+			logger.info("Request comes from Image Controller to Image ServiceImpl through Image Service");
+			
+			
+			System.out.println("Event is present"+event);
+			Images images = new Images();
+			images.setType(file.getContentType());
+			images.setFilePath(filePath);
+			images.setEvent(eventId);
+
+			file.transferTo(new File(filePath));
+
+			return imagesRepository.save(images);
+		} else {
+			
+			logger.error("Image is not uploaded Successfully && Event is not present");
+			
+			System.out.println("Event Id is not present");
+			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Event with this Id is not present");
+
 		}
-    	else
-    	{
-    		System.out.println("Event Id is not present");
-    		throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Event with this Id is not present");
-					
-    	}
-    	
+
 	}
 
-    
-    @Override
-    public byte[] getImageById(Long id) throws IOException 
-    {
-        Optional<Images> imageOptional = imagesRepository.findById(id);
-        Images image = imageOptional.orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                                                                                    "Image with this Id is not present"));
-        String filePath = image.getFilePath();
-        return Files.readAllBytes(new File(filePath).toPath());
-    }
-
+	@Override
+	public byte[] getImageById(Long id) throws IOException {
+		Optional<Images> imageOptional = imagesRepository.findById(id);
+		Images image = imageOptional.orElseThrow(
+				() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Image with this Id is not present"));
+		String filePath = image.getFilePath();
+		return Files.readAllBytes(new File(filePath).toPath());
+	}
 
 //	@Override
 //	public List<byte[]> getAll(Long id) 
@@ -92,9 +95,7 @@ public class ImageServiceImpl implements ImageService
 //		}
 //		
 //	}
-    
-    
-    
+
 //    @Override
 //    public List<byte[]> getAllImages() throws IOException 
 //    {
@@ -115,26 +116,16 @@ public class ImageServiceImpl implements ImageService
 //                        .toList();
 //    }
 
-
 	@Override
-	public void deleteByImageId(Long id) 
-	{
+	public void deleteByImageId(Long id) {
 		imagesRepository.deleteById(id);
-		
-	}
 
+	}
 
 //	@Override
 //	public List<byte[]> getAll(Long id) {
 //		// TODO Auto-generated method stub
 //		return null;
 //	}
-
-    
-
-
-    
-
-	
 
 }

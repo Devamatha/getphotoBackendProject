@@ -19,10 +19,11 @@ import com.techpixe.getphoto.service.ImageStoringService;
 public class ImageStoringController {
 	@Autowired
 	private ImageStoringService imageStoringService;
+
 	@PostMapping("/upload/{event}")
-	public ResponseEntity<?> uploadImage(@PathVariable Long event,@RequestParam("image")MultipartFile image) throws IOException {
-		String uploadImage = imageStoringService.uploadImage(event,image);
-		return ResponseEntity.status(HttpStatus.OK)
-				.body(uploadImage);
+	public ResponseEntity<?> uploadImage(@PathVariable Long event, @RequestParam("image") MultipartFile image)
+			throws IOException {
+		String uploadImage = imageStoringService.uploadImage(event, image);
+		return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
 	}
 }
