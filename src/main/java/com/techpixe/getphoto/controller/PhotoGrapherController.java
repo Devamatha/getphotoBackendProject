@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techpixe.getphoto.dto.ErrorResponseDto;
+import com.techpixe.getphoto.entity.Event;
+import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.entity.PhotoGrapher;
 import com.techpixe.getphoto.service.PhotoGrapherService;
+import com.techpixe.getphoto.util.ImageUtils;
 
 @RestController
 @RequestMapping("/client")
@@ -72,6 +75,7 @@ public class PhotoGrapherController {
 	@GetMapping("/get/{photographer_Id}")
 	public ResponseEntity<?> fetchById(@PathVariable("photographer_Id") Long id) {
 		PhotoGrapher fetchById = photoGrapherService.fetchById(id);
+	
 		return ResponseEntity.ok(fetchById);
 	}
 
@@ -84,9 +88,9 @@ public class PhotoGrapherController {
 	@DeleteMapping("/delete/{photographer_Id}")
 	public ResponseEntity<Void> deleteById(@PathVariable("photographer_Id") Long id) {
 		PhotoGrapher photoGrapher = photoGrapherService.fetchById(id);
-		
+
 		if (photoGrapher == null) {
-			System.out.println("Photographer Id is :"+photoGrapher);
+			System.out.println("Photographer Id is :" + photoGrapher);
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {

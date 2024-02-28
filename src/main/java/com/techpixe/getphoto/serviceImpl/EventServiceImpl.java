@@ -59,6 +59,8 @@ public class EventServiceImpl implements EventService {
 			event.setEventAddress(eventAddress);
 			event.setPhotoGrapher(photoGrapherId);
 			event.setEventDate(eventDate);
+			Long lastEventId = eventRepository.findTopId();
+			Long nextEventId = (lastEventId != null) ? lastEventId + 1 : 1;
 			QRCodeWriter qrCodeWriter = new QRCodeWriter();
 			Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 			hintsMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
@@ -69,7 +71,7 @@ public class EventServiceImpl implements EventService {
 //	            String qrContent = eventName + "\n" + eventAddress + "\nhttp://localhost:4200/registration";
 
 //	            String qrContent = event + "\nhttp://localhost:4200/registration";
-				String qrContent = "http://localhost:4200/registration";
+				String qrContent = "http://localhost:4200/registration/" + +nextEventId;
 
 				bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, width, height, hintsMap);
 			} catch (WriterException e) {
@@ -116,7 +118,6 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Event fetchById(Long id) {
-
 		return eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Id is not present" + id));
 	}
 
@@ -131,11 +132,11 @@ public class EventServiceImpl implements EventService {
 	}
 
 	@Override
-	public Optional<Event> update(String eventName, String eventAddress,Date eventDate, Long id) {
+	public Optional<Event> update(String eventName, String eventAddress, Date eventDate, Long id) {
 		return eventRepository.findById(id).map(existingEvent -> {
 			existingEvent.setEventName(eventName != null ? eventName : existingEvent.getEventName());
 			existingEvent.setEventAddress(eventAddress != null ? eventAddress : existingEvent.getEventAddress());
-			existingEvent.setEventDate(eventDate !=null ? eventDate :existingEvent.getEventDate());
+			existingEvent.setEventDate(eventDate != null ? eventDate : existingEvent.getEventDate());
 			return eventRepository.save(existingEvent);
 
 		});

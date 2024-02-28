@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,7 +24,7 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 	private EventRepository eventRepository;
 
 	@Override
-	public String uploadImage(Long event, MultipartFile image) throws IOException {
+	public ResponseEntity<?> uploadImage(Long event, MultipartFile image) throws IOException {
 		Event eventId = eventRepository.findById(event)
 				.orElseThrow(() -> new RuntimeException("Event with ID " + event + " not found"));
 
@@ -36,11 +37,12 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 			ImageStoring savedImage = imageStoringRepository.save(imageData);
 
 			if (savedImage != null) {
-				return "File uploaded successfully: " + image.getOriginalFilename() + " with Event ID: " + event;
+				return ResponseEntity.ok(savedImage);
 			}
 		}
+	    return ResponseEntity.internalServerError().body("Event with ID " + event + " not found");
 
-		return null;
+
 	}
 
 	@Override
@@ -50,7 +52,6 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 
 	@Override
 	public ImageStoring fetchById(Long id) {
-
 		return imageStoringRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
 	}
 

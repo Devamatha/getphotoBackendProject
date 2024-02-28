@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.techpixe.getphoto.entity.Event;
 import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.service.ImageStoringService;
 
@@ -22,22 +23,30 @@ public class ImageStoringController {
 	@Autowired
 	private ImageStoringService imageStoringService;
 
+//	@PostMapping("/upload/{event}")
+//	public ResponseEntity<?> uploadImage(@PathVariable Long event, @RequestParam("image") MultipartFile image)
+//			throws IOException {
+//		String uploadImage = imageStoringService.uploadImage(event, image);
+//		return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+//	}
+//	
 	@PostMapping("/upload/{event}")
 	public ResponseEntity<?> uploadImage(@PathVariable Long event, @RequestParam("image") MultipartFile image)
 			throws IOException {
-		String uploadImage = imageStoringService.uploadImage(event, image);
-		return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+
+		return imageStoringService.uploadImage(event, image);
+
 	}
 
-	@DeleteMapping("/delete/{Id}")
-	public ResponseEntity<Void> deleteImgaes(@PathVariable Long Id) {
-		ImageStoring imageStoring = imageStoringService.fetchById(Id);
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+		ImageStoring imageStoring = imageStoringService.fetchById(id);
 		if (imageStoring == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			imageStoringService.deleteimage(Id);
+			imageStoringService.deleteimage(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-
 	}
+
 }
