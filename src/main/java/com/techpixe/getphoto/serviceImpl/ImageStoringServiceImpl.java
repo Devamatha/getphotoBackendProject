@@ -53,6 +53,8 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 	@Override
 	public ImageStoring fetchById(Long id) {
 		return imageStoringRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
+
 	}
+
 
 }

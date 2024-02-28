@@ -5,7 +5,6 @@ import java.io.IOException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.techpixe.getphoto.entity.Event;
 import com.techpixe.getphoto.entity.ImageStoring;
 
 

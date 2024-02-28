@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,9 @@ import com.techpixe.getphoto.service.PhotoGrapherService;
 
 @Service
 public class PhotoGrapherServiceImpl implements PhotoGrapherService {
+
+	private static final Logger logger = Logger.getLogger(PhotoGrapherServiceImpl.class);
+
 	@Autowired
 	private PhotoGrapherRepository photoGrapherRepository;
 
@@ -42,6 +46,11 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 		Admin admin2 = adminRepository.findById(admin)
 				.orElseThrow(() -> new RuntimeException("Id is not present" + admin));
 		if (admin2 != null) {
+
+			logger.debug("Photographer Registration is successfull based on Admin");
+			logger.info(
+					"Request comes from PhotoGrapherController to PhotoGrapherServiceImpl through PhotoGrapher Service");
+
 			System.out.println("id is  present" + admin2);
 			PhotoGrapher photoGrapher = new PhotoGrapher();
 			photoGrapher.setAdmin(admin2);
@@ -66,6 +75,9 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			javaMailSender.send(simpleMailMessage);
 			return photoGrapher;
 		} else {
+
+			logger.error("Registration is Unsuccessfull. Admin Id is not Present");
+
 			System.out.println("id is not present");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Admin with this Id is not present" + admin);
 		}
@@ -143,8 +155,14 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 	public List<PhotoGrapher> fetchAll() {
 		List<PhotoGrapher> fetchAll = photoGrapherRepository.findAll();
 		if (fetchAll.isEmpty()) {
+
+			logger.error("No PhotoGraphers Present");
+
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, " No PhotoGraphers found");
 		}
+		logger.debug("Photographers are Found");
+		logger.info("Request comes from PhotoGrapher Controller to PhotoGrapher Service through SErvice");
+
 		return fetchAll;
 	}
 
@@ -165,6 +183,5 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			return photoGrapherRepository.save(existingPhotoGrapher);
 		});
 	}
-
 
 }

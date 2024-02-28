@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.techpixe.getphoto.entity.Event;
 import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.service.ImageStoringService;
 
