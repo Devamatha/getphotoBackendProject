@@ -23,9 +23,6 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 	@Autowired
 	private EventRepository eventRepository;
 
-
-
-	
 	@Override
 	public ResponseEntity<?> uploadImage(Long event, MultipartFile image) throws IOException {
 		Event eventId = eventRepository.findById(event)
@@ -43,10 +40,10 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 				return ResponseEntity.ok(savedImage);
 			}
 		}
-	    return ResponseEntity.internalServerError().body("Event with ID " + event + " not found");
-
+		return ResponseEntity.internalServerError().body("Event with ID " + event + " not found");
 
 	}
+
 	@Override
 	public void deleteimage(long id) {
 		imageStoringRepository.deleteById(id);
@@ -55,7 +52,8 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 	@Override
 	public ImageStoring fetchById(Long id) {
 
-		return imageStoringRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
+		return imageStoringRepository.findById(id)
+				.orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
 	}
 
 }
