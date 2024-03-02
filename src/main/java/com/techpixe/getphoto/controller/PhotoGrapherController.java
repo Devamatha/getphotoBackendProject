@@ -28,9 +28,9 @@ public class PhotoGrapherController {
 	@PostMapping("/registration/{admin}")
 
 	public ResponseEntity<?> addRegisterion(@PathVariable Long admin, @RequestParam String email,
-			@RequestParam Long mobileNumber, @RequestParam String fullName) {
+			@RequestParam Long mobileNumber, @RequestParam String fullName ,@RequestParam double subcriptionPlan,@RequestParam long totalImages) {
 		try {
-			PhotoGrapher registration = photoGrapherService.registration(admin, email, mobileNumber, fullName);
+			PhotoGrapher registration = photoGrapherService.registration(admin, email, mobileNumber, fullName,subcriptionPlan,totalImages);
 
 			return ResponseEntity.ok(registration);
 		} catch (Exception e) {

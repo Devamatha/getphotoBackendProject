@@ -4,12 +4,14 @@ import java.io.IOException;
 import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.techpixe.getphoto.entity.Event;
 import com.techpixe.getphoto.entity.ImageStoring;
+import com.techpixe.getphoto.entity.PhotoGrapher;
 import com.techpixe.getphoto.repository.EventRepository;
 import com.techpixe.getphoto.repository.ImageStoringRepository;
 import com.techpixe.getphoto.service.ImageStoringService;
@@ -27,6 +29,15 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 	public ResponseEntity<?> uploadImage(Long event, MultipartFile image) throws IOException {
 		Event eventId = eventRepository.findById(event)
 				.orElseThrow(() -> new RuntimeException("Event with ID " + event + " not found"));
+
+		PhotoGrapher photographer = eventId.getPhotoGrapher();
+		long totalImagesUploaded = photographer.getEvent().stream().mapToLong(ev -> ev.getImageStoring().size()).sum();
+		System.out.println(totalImagesUploaded+"totalImagesUploaded");
+		System.out.println(photographer.getTotalImages()+"photographer.getTotalImages");
+		if (totalImagesUploaded >= photographer.getTotalImages()) {
+			return ResponseEntity.internalServerError()
+					.body("Internal Server Error: Please upgrade your plan.");
+		}
 
 		if (eventId != null) {
 			System.out.println("event ID: " + eventId.getEvent_Id());

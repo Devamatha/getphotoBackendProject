@@ -36,6 +36,8 @@ public class PhotoGrapher {
 	private String password;
 
 	private String fullName;
+	private double subcriptionPlan;
+	private long totalImages;
 
 	private LocalDate registrationDate;
 	private String role;

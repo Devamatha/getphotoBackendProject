@@ -38,7 +38,8 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 	private String fromMail;
 
 	@Override
-	public PhotoGrapher registration(Long admin, String email, Long mobileNumber, String fullName) {
+	public PhotoGrapher registration(Long admin, String email, Long mobileNumber, String fullName,
+			double subcriptionPlan, long totalImages) {
 		Admin admin2 = adminRepository.findById(admin)
 				.orElseThrow(() -> new RuntimeException("Id is not present" + admin));
 		if (admin2 != null) {
@@ -52,7 +53,8 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			photoGrapher.setRegistrationDate(LocalDate.now());
 			String password = generatePassword();
 			photoGrapher.setPassword(password);
-
+			photoGrapher.setSubcriptionPlan(subcriptionPlan);
+			photoGrapher.setTotalImages(totalImages);
 			photoGrapher = photoGrapherRepository.save(photoGrapher);
 			SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 			simpleMailMessage.setFrom(fromMail);
@@ -165,6 +167,5 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			return photoGrapherRepository.save(existingPhotoGrapher);
 		});
 	}
-
 
 }
