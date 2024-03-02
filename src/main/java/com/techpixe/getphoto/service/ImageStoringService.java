@@ -15,5 +15,3 @@ public interface ImageStoringService {
 
 	ImageStoring fetchById(Long id);
 }
-
-

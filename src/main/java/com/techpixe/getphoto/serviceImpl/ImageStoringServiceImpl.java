@@ -32,11 +32,10 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 
 		PhotoGrapher photographer = eventId.getPhotoGrapher();
 		long totalImagesUploaded = photographer.getEvent().stream().mapToLong(ev -> ev.getImages().size()).sum();
-		System.out.println(totalImagesUploaded+"totalImagesUploaded");
-		System.out.println(photographer.getTotalImages()+"photographer.getTotalImages");
+		System.out.println(totalImagesUploaded + "totalImagesUploaded");
+		System.out.println(photographer.getTotalImages() + "photographer.getTotalImages");
 		if (totalImagesUploaded >= photographer.getTotalImages()) {
-			return ResponseEntity.internalServerError()
-					.body("Internal Server Error: Please upgrade your plan.");
+			return ResponseEntity.internalServerError().body("Internal Server Error: Please upgrade your plan.");
 		}
 
 		if (eventId != null) {
@@ -53,7 +52,6 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 		}
 		return ResponseEntity.internalServerError().body("Event with ID " + event + " not found");
 
-
 	}
 
 	@Override
@@ -68,6 +66,5 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 				.orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
 
 	}
-
 
 }

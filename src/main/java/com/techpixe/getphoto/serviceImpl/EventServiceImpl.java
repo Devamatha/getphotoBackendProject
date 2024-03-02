@@ -38,9 +38,9 @@ import com.techpixe.getphoto.service.EventService;
 
 @Service
 public class EventServiceImpl implements EventService {
-	
+
 	public static final Logger logger = Logger.getLogger(EventServiceImpl.class);
-	
+
 	@Autowired
 	private EventRepository eventRepository;
 
@@ -58,11 +58,10 @@ public class EventServiceImpl implements EventService {
 		PhotoGrapher photoGrapherId = photoGrapherRepository.findById(photoGrapher)
 				.orElseThrow(() -> new RuntimeException("Id is not present" + photoGrapher));
 		if (photoGrapherId != null) {
-			
+
 			logger.debug("Event Registration is Successfull");
 			logger.info("Request comes from the Event Controller to Event ServiceImpl through Service ");
-			
-			
+
 			Event event = new Event();
 			event.setEventName(eventName);
 			event.setEventAddress(eventAddress);
@@ -99,9 +98,9 @@ public class EventServiceImpl implements EventService {
 
 			return eventRepository.save(event);
 		} else {
-			
+
 			logger.error("PhotoGrapher Id is not Present");
-			
+
 			System.out.println("id is not present");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"photoGrapher with this Id is not present" + photoGrapher);
@@ -138,14 +137,14 @@ public class EventServiceImpl implements EventService {
 
 		List<Event> fetchAll = eventRepository.findAll();
 		if (fetchAll.isEmpty()) {
-			
+
 			logger.error("No Events  Found");
-			
+
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No events found");
 		}
 		logger.debug("Events are Found");
 		logger.info("Request comes form Event Controller to ServiceImpl through Service");
-		
+
 		return fetchAll;
 	}
 
