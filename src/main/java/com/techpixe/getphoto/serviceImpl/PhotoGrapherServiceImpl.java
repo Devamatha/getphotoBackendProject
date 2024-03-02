@@ -186,4 +186,13 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 		});
 	}
 
+	@Override
+	public Optional<PhotoGrapher> UpgradePlan(Long id, double subcriptionPlan, long totalImages) {
+		return photoGrapherRepository.findById(id).map(existingPhotoGrapher -> {
+			existingPhotoGrapher.setSubcriptionPlan(subcriptionPlan);
+			existingPhotoGrapher.setTotalImages(totalImages);
+			return photoGrapherRepository.save(existingPhotoGrapher);
+		});
+	}
+
 }

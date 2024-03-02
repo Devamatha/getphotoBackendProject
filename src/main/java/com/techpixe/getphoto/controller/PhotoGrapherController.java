@@ -119,5 +119,12 @@ public class PhotoGrapherController {
 				fullName);
 		return updatePhotographer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
+	
+	@PutMapping("/upgardePlan/{photographer_Id}")
+	public ResponseEntity<PhotoGrapher> UpgradePlan(@PathVariable("photographer_Id") Long id,
+			@RequestParam double subcriptionPlan,@RequestParam long totalImages) {
+		Optional<PhotoGrapher> updatePhotographer = photoGrapherService.UpgradePlan(id, subcriptionPlan, totalImages);
+		return updatePhotographer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
 
 }

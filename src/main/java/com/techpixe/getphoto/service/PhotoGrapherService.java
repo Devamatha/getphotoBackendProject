@@ -23,6 +23,7 @@ public interface PhotoGrapherService {
 
 	Optional<PhotoGrapher> update(Long id, String email, Long mobileNumber, String password, String fullName);
 
+	Optional<PhotoGrapher> UpgradePlan(Long id, double subcriptionPlan, long totalImages);
 	// ************Forgot Password***************
 
 	// ResponseEntity<?> forgotPassword(String email);
