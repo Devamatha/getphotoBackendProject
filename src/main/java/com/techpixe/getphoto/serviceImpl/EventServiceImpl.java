@@ -80,7 +80,7 @@ public class EventServiceImpl implements EventService {
 //	            String qrContent = eventName + "\n" + eventAddress + "\nhttp://localhost:4200/registration";
 
 //	            String qrContent = event + "\nhttp://localhost:4200/registration";
-				String qrContent = "http://localhost:4200/registration/" + +nextEventId;
+				String qrContent = "http://localhost:4200/Whatsapp/" + +nextEventId;
 
 				bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, width, height, hintsMap);
 			} catch (WriterException e) {

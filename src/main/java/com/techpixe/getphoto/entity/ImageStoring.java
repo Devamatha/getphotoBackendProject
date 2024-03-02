@@ -21,8 +21,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ImageStoring 
-{
+public class ImageStoring {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long Id;
@@ -31,6 +30,7 @@ public class ImageStoring
 	@Lob
 	private byte[] image;
 
+	@JsonBackReference
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "event_Id")
 	private Event event;

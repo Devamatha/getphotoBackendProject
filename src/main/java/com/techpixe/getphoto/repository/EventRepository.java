@@ -5,6 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.techpixe.getphoto.entity.Event;
+
 @Repository
 public interface EventRepository extends JpaRepository<Event, Long> {
 

@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import com.techpixe.getphoto.entity.PhotoGrapher;
 
 public interface PhotoGrapherService {
-	PhotoGrapher registration(Long admin, String email, Long mobileNumber, String fullName,double subcriptionPlan, long totalImages);
+	PhotoGrapher registration(Long admin, String email, Long mobileNumber, String fullName, double subcriptionPlan,
+			long totalImages);
 
 	ResponseEntity<?> loginByMobileNumber(Long mobileNumber, String password);
 

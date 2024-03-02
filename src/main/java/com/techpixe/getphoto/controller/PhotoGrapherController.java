@@ -35,12 +35,13 @@ public class PhotoGrapherController {
 	@PostMapping("/registration/{admin}")
 
 	public ResponseEntity<?> addRegisterion(@PathVariable Long admin, @RequestParam String email,
-			@RequestParam Long mobileNumber, @RequestParam String fullName ,@RequestParam double subcriptionPlan,@RequestParam long totalImages) {
+			@RequestParam Long mobileNumber, @RequestParam String fullName, @RequestParam double subcriptionPlan,
+			@RequestParam long totalImages) {
 		try {
-			PhotoGrapher registration = photoGrapherService.registration(admin, email, mobileNumber, fullName,subcriptionPlan,totalImages);
+			PhotoGrapher registration = photoGrapherService.registration(admin, email, mobileNumber, fullName,
+					subcriptionPlan, totalImages);
 
 			logger.debug("PhotoGrapher Registration is Successfull");
-
 
 			return ResponseEntity.ok(registration);
 		} catch (Exception e) {
@@ -85,7 +86,7 @@ public class PhotoGrapherController {
 	@GetMapping("/get/{photographer_Id}")
 	public ResponseEntity<?> fetchById(@PathVariable("photographer_Id") Long id) {
 		PhotoGrapher fetchById = photoGrapherService.fetchById(id);
-	
+
 		return ResponseEntity.ok(fetchById);
 	}
 

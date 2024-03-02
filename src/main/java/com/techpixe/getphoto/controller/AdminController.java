@@ -20,9 +20,6 @@ public class AdminController {
 	@Autowired
 	private AdminService adminService;
 
-	/*
-	 * LOG 4J
-	 */
 	private static final Logger logger = Logger.getLogger(AdminController.class);
 
 	@PostMapping("/registration")

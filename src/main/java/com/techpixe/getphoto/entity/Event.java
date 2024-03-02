@@ -4,9 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import jakarta.persistence.Column;
@@ -50,9 +48,12 @@ public class Event {
 	@JoinColumn(name = "photographer_Id")
 	private PhotoGrapher photoGrapher;
 
-	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
-	private List<Images>images=new ArrayList<>();
+	private List<ImageStoring> images = new ArrayList<>();
+
+	@JsonManagedReference
+	@OneToMany(mappedBy = "event", fetch = FetchType.EAGER)
+	private List<Images> photos = new ArrayList<>();
 
 }

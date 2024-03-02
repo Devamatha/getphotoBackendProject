@@ -46,8 +46,6 @@ public class PhotoGrapher {
 	@JoinColumn(name = "admin_Id")
 	private Admin admin;
 
-
-	
 	@JsonManagedReference
 	@OneToMany(mappedBy = "photoGrapher", fetch = FetchType.EAGER)
 	private List<Event> event = new ArrayList<>();
