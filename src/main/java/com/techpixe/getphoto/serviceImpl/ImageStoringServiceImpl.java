@@ -31,7 +31,7 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 				.orElseThrow(() -> new RuntimeException("Event with ID " + event + " not found"));
 
 		PhotoGrapher photographer = eventId.getPhotoGrapher();
-		long totalImagesUploaded = photographer.getEvent().stream().mapToLong(ev -> ev.getImageStoring().size()).sum();
+		long totalImagesUploaded = photographer.getEvent().stream().mapToLong(ev -> ev.getImages().size()).sum();
 		System.out.println(totalImagesUploaded+"totalImagesUploaded");
 		System.out.println(photographer.getTotalImages()+"photographer.getTotalImages");
 		if (totalImagesUploaded >= photographer.getTotalImages()) {
@@ -53,6 +53,7 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 		}
 		return ResponseEntity.internalServerError().body("Event with ID " + event + " not found");
 
+
 	}
 
 	@Override
@@ -65,6 +66,8 @@ public class ImageStoringServiceImpl implements ImageStoringService {
 
 		return imageStoringRepository.findById(id)
 				.orElseThrow(() -> new NoSuchElementException("Image Storing Id '" + id + "' is not present "));
+
 	}
+
 
 }

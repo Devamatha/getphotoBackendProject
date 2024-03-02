@@ -22,6 +22,13 @@ public class ImageStoringController {
 	@Autowired
 	private ImageStoringService imageStoringService;
 
+//	@PostMapping("/upload/{event}")
+//	public ResponseEntity<?> uploadImage(@PathVariable Long event, @RequestParam("image") MultipartFile image)
+//			throws IOException {
+//		String uploadImage = imageStoringService.uploadImage(event, image);
+//		return ResponseEntity.status(HttpStatus.OK).body(uploadImage);
+//	}
+//	
 	@PostMapping("/upload/{event}")
 	public ResponseEntity<?> uploadImage(@PathVariable Long event, @RequestParam("image") MultipartFile image)
 			throws IOException {
@@ -30,15 +37,15 @@ public class ImageStoringController {
 
 	}
 
-	@DeleteMapping("/delete/{Id}")
-	public ResponseEntity<Void> deleteImgaes(@PathVariable Long Id) {
-		ImageStoring imageStoring = imageStoringService.fetchById(Id);
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Void> deleteById(@PathVariable Long id) {
+		ImageStoring imageStoring = imageStoringService.fetchById(id);
 		if (imageStoring == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
-			imageStoringService.deleteimage(Id);
+			imageStoringService.deleteimage(id);
 			return new ResponseEntity<>(HttpStatus.OK);
 		}
-
 	}
+
 }
