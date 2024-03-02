@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -37,6 +38,9 @@ import com.techpixe.getphoto.service.EventService;
 
 @Service
 public class EventServiceImpl implements EventService {
+	
+	public static final Logger logger = Logger.getLogger(EventServiceImpl.class);
+	
 	@Autowired
 	private EventRepository eventRepository;
 
@@ -54,11 +58,18 @@ public class EventServiceImpl implements EventService {
 		PhotoGrapher photoGrapherId = photoGrapherRepository.findById(photoGrapher)
 				.orElseThrow(() -> new RuntimeException("Id is not present" + photoGrapher));
 		if (photoGrapherId != null) {
+			
+			logger.debug("Event Registration is Successfull");
+			logger.info("Request comes from the Event Controller to Event ServiceImpl through Service ");
+			
+			
 			Event event = new Event();
 			event.setEventName(eventName);
 			event.setEventAddress(eventAddress);
 			event.setPhotoGrapher(photoGrapherId);
 			event.setEventDate(eventDate);
+			Long lastEventId = eventRepository.findTopId();
+			Long nextEventId = (lastEventId != null) ? lastEventId + 1 : 1;
 			QRCodeWriter qrCodeWriter = new QRCodeWriter();
 			Map<EncodeHintType, Object> hintsMap = new HashMap<>();
 			hintsMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
@@ -69,7 +80,7 @@ public class EventServiceImpl implements EventService {
 //	            String qrContent = eventName + "\n" + eventAddress + "\nhttp://localhost:4200/registration";
 
 //	            String qrContent = event + "\nhttp://localhost:4200/registration";
-				String qrContent = "http://localhost:4200/registration";
+				String qrContent = "http://localhost:4200/registration/" + +nextEventId;
 
 				bitMatrix = qrCodeWriter.encode(qrContent, BarcodeFormat.QR_CODE, width, height, hintsMap);
 			} catch (WriterException e) {
@@ -88,6 +99,9 @@ public class EventServiceImpl implements EventService {
 
 			return eventRepository.save(event);
 		} else {
+			
+			logger.error("PhotoGrapher Id is not Present");
+			
 			System.out.println("id is not present");
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND,
 					"photoGrapher with this Id is not present" + photoGrapher);
@@ -116,7 +130,6 @@ public class EventServiceImpl implements EventService {
 
 	@Override
 	public Event fetchById(Long id) {
-
 		return eventRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Id is not present" + id));
 	}
 
@@ -125,17 +138,23 @@ public class EventServiceImpl implements EventService {
 
 		List<Event> fetchAll = eventRepository.findAll();
 		if (fetchAll.isEmpty()) {
+			
+			logger.error("No Events  Found");
+			
 			throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "No events found");
 		}
+		logger.debug("Events are Found");
+		logger.info("Request comes form Event Controller to ServiceImpl through Service");
+		
 		return fetchAll;
 	}
 
 	@Override
-	public Optional<Event> update(String eventName, String eventAddress,Date eventDate, Long id) {
+	public Optional<Event> update(String eventName, String eventAddress, Date eventDate, Long id) {
 		return eventRepository.findById(id).map(existingEvent -> {
 			existingEvent.setEventName(eventName != null ? eventName : existingEvent.getEventName());
 			existingEvent.setEventAddress(eventAddress != null ? eventAddress : existingEvent.getEventAddress());
-			existingEvent.setEventDate(eventDate !=null ? eventDate :existingEvent.getEventDate());
+			existingEvent.setEventDate(eventDate != null ? eventDate : existingEvent.getEventDate());
 			return eventRepository.save(existingEvent);
 
 		});

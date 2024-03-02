@@ -3,6 +3,7 @@ package com.techpixe.getphoto.controller;
 import java.util.List;
 import java.util.Optional;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,12 +17,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techpixe.getphoto.dto.ErrorResponseDto;
+import com.techpixe.getphoto.entity.Event;
+import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.entity.PhotoGrapher;
 import com.techpixe.getphoto.service.PhotoGrapherService;
+import com.techpixe.getphoto.util.ImageUtils;
 
 @RestController
 @RequestMapping("/client")
 public class PhotoGrapherController {
+
+	private static final Logger logger = Logger.getLogger(PhotoGrapherController.class);
+
 	@Autowired
 	private PhotoGrapherService photoGrapherService;
 
@@ -32,8 +39,14 @@ public class PhotoGrapherController {
 		try {
 			PhotoGrapher registration = photoGrapherService.registration(admin, email, mobileNumber, fullName,subcriptionPlan,totalImages);
 
+			logger.debug("PhotoGrapher Registration is Successfull");
+
+
 			return ResponseEntity.ok(registration);
 		} catch (Exception e) {
+
+			logger.error("PhotoGrapher Registration is Unsuccessfull");
+
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error Procesing in the request");
 
 		}
@@ -72,6 +85,7 @@ public class PhotoGrapherController {
 	@GetMapping("/get/{photographer_Id}")
 	public ResponseEntity<?> fetchById(@PathVariable("photographer_Id") Long id) {
 		PhotoGrapher fetchById = photoGrapherService.fetchById(id);
+	
 		return ResponseEntity.ok(fetchById);
 	}
 
@@ -84,9 +98,9 @@ public class PhotoGrapherController {
 	@DeleteMapping("/delete/{photographer_Id}")
 	public ResponseEntity<Void> deleteById(@PathVariable("photographer_Id") Long id) {
 		PhotoGrapher photoGrapher = photoGrapherService.fetchById(id);
-		
+
 		if (photoGrapher == null) {
-			System.out.println("Photographer Id is :"+photoGrapher);
+			System.out.println("Photographer Id is :" + photoGrapher);
 
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} else {
