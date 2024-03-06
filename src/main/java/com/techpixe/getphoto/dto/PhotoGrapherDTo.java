@@ -8,6 +8,8 @@ public class PhotoGrapherDTo {
 	private String password;
 	private String fullName;
 	private String role;
+	private double subcriptionPlan;
+	private long totalImages;
 
 	public Long getPhotographer_Id() {
 		return photographer_Id;
@@ -55,6 +57,22 @@ public class PhotoGrapherDTo {
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public double getSubcriptionPlan() {
+		return subcriptionPlan;
+	}
+
+	public void setSubcriptionPlan(double subcriptionPlan) {
+		this.subcriptionPlan = subcriptionPlan;
+	}
+
+	public long getTotalImages() {
+		return totalImages;
+	}
+
+	public void setTotalImages(long totalImages) {
+		this.totalImages = totalImages;
 	}
 
 }
