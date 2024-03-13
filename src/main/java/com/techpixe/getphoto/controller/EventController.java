@@ -1,11 +1,14 @@
 package com.techpixe.getphoto.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
-import java.sql.Date;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +25,8 @@ import com.techpixe.getphoto.entity.Event;
 import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.service.EventService;
 import com.techpixe.getphoto.util.ImageUtils;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/event")
@@ -106,5 +111,24 @@ public class EventController {
 
 		Optional<Event> updatedEvent = eventService.update(eventName, eventAddress, eventDate, id);
 		return updatedEvent.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
+	}
+
+	@GetMapping("/{eventId}/qrCode")
+	public void downloadQrCode(@PathVariable("eventId") Long eventId, HttpServletResponse response) throws IOException {
+		Event event = eventService.fetchById(eventId);
+		if (event == null || event.getQrCode() == null) {
+			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
+
+		response.setContentType("image/png");
+		response.setHeader("Content-Disposition", "attachment; filename=qrCode.png");
+
+		// Write the QR code image to the response output stream
+		try (OutputStream outputStream = response.getOutputStream()) {
+			IOUtils.copy(new ByteArrayInputStream(event.getQrCode()), outputStream);
+		} catch (IOException e) {
+			// Handle exception
+		}
 	}
 }
