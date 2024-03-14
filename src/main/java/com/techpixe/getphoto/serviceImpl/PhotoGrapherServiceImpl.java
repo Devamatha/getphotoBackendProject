@@ -17,8 +17,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.techpixe.getphoto.dto.ErrorResponseDto;
+import com.techpixe.getphoto.dto.ImageCountDTO;
 import com.techpixe.getphoto.dto.PhotoGrapherDTo;
 import com.techpixe.getphoto.entity.Admin;
+import com.techpixe.getphoto.entity.Event;
+import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.entity.PhotoGrapher;
 import com.techpixe.getphoto.repository.AdminRepository;
 import com.techpixe.getphoto.repository.PhotoGrapherRepository;
@@ -193,6 +196,26 @@ public class PhotoGrapherServiceImpl implements PhotoGrapherService {
 			existingPhotoGrapher.setTotalImages(totalImages);
 			return photoGrapherRepository.save(existingPhotoGrapher);
 		});
+	}
+
+	public ImageCountDTO getImageCount(Long photographerId) {
+		PhotoGrapher photographer = photoGrapherRepository.findById(photographerId)
+				.orElseThrow(() -> new RuntimeException("Photographer not found with id: " + photographerId));
+
+		long totalUploadedImages = calculateTotalUploadedImages(photographer);
+
+		long totalRemaingImages =photographer.getTotalImages() -totalUploadedImages ;
+		return new ImageCountDTO(totalUploadedImages, photographer.getTotalImages(), totalRemaingImages);
+	}
+
+	private long calculateTotalUploadedImages(PhotoGrapher photographer) {
+		long totalUploadedImages = 0;
+		for (Event event : photographer.getEvent()) {
+			for (ImageStoring image : event.getImages()) {
+				totalUploadedImages++;
+			}
+		}
+		return totalUploadedImages;
 	}
 
 }
