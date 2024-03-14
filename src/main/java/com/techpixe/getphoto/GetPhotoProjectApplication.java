@@ -19,13 +19,12 @@ public class GetPhotoProjectApplication {
 	@Autowired
 	private TwilioConfig twilioConfig;
 
+	public static void main(String[] args) {
+		SpringApplication.run(GetPhotoProjectApplication.class, args);
+	}
 	@PostConstruct
 	public void initTwilio(){
 		Twilio.init(twilioConfig.getAccountSid(),twilioConfig.getAuthToken());
-	}
-
-	public static void main(String[] args) {
-		SpringApplication.run(GetPhotoProjectApplication.class, args);
 	}
 
 }
