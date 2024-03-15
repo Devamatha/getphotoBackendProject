@@ -17,10 +17,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.techpixe.getphoto.dto.ErrorResponseDto;
-import com.techpixe.getphoto.dto.ImageCountDTO;
+import com.techpixe.getphoto.entity.Event;
+import com.techpixe.getphoto.entity.ImageStoring;
 import com.techpixe.getphoto.entity.PhotoGrapher;
 import com.techpixe.getphoto.service.PhotoGrapherService;
-import com.techpixe.getphoto.serviceImpl.PhotoGrapherServiceImpl;
+import com.techpixe.getphoto.util.ImageUtils;
 
 @RestController
 @RequestMapping("/client")
@@ -31,8 +32,6 @@ public class PhotoGrapherController {
 	@Autowired
 	private PhotoGrapherService photoGrapherService;
 
-	@Autowired
-	private PhotoGrapherServiceImpl photoGrapherServiceImpl;
 	@PostMapping("/registration/{admin}")
 
 	public ResponseEntity<?> addRegisterion(@PathVariable Long admin, @RequestParam String email,
@@ -127,10 +126,5 @@ public class PhotoGrapherController {
 		Optional<PhotoGrapher> updatePhotographer = photoGrapherService.UpgradePlan(id, subcriptionPlan, totalImages);
 		return updatePhotographer.map(ResponseEntity::ok).orElse(ResponseEntity.notFound().build());
 	}
-	
-	@GetMapping("/image-count/{photographerId}")
-    public ImageCountDTO getImageCount(@PathVariable Long photographerId) {
-        return photoGrapherServiceImpl.getImageCount(photographerId);
-    }
 
 }

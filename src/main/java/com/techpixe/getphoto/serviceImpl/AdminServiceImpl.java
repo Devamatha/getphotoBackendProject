@@ -84,8 +84,6 @@ public class AdminServiceImpl implements AdminService {
 			photoGrapherDTo.setMobileNumber(user1.getMobileNumber());
 			photoGrapherDTo.setPassword(user1.getPassword());
 			photoGrapherDTo.setRole(user1.getRole());
-			photoGrapherDTo.setSubcriptionPlan(user1.getSubcriptionPlan());
-			photoGrapherDTo.setTotalImages(user1.getTotalImages());
 			return ResponseEntity.ok(photoGrapherDTo);
 		} else {
 
@@ -114,7 +112,6 @@ public class AdminServiceImpl implements AdminService {
 			applicationFormDTo.setMobileNumber(user.getMobileNumber());
 			applicationFormDTo.setPassword(user.getPassword());
 			applicationFormDTo.setRole(user.getRole());
-
 			return ResponseEntity.ok(applicationFormDTo);
 
 		} else if (user1 != null && user1.getPassword().equals(password)) {
@@ -129,8 +126,6 @@ public class AdminServiceImpl implements AdminService {
 			photoGrapherDTo.setMobileNumber(user1.getMobileNumber());
 			photoGrapherDTo.setPassword(user1.getPassword());
 			photoGrapherDTo.setRole(user1.getRole());
-			photoGrapherDTo.setSubcriptionPlan(user1.getSubcriptionPlan());
-			photoGrapherDTo.setTotalImages(user1.getTotalImages());
 
 			return ResponseEntity.ok(photoGrapherDTo);
 		} else {
